@@ -6,101 +6,143 @@ export default function Preloader() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setLoading(false), 400);
-          return 100;
-        }
-        return prev + Math.random() * 15 + 5;
-      });
-    }, 80);
-    return () => clearInterval(interval);
+    let startTime = null;
+    const duration = 2000; // 2 seconds loading
+
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+    const updateProgress = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const runtime = timestamp - startTime;
+      const relativeProgress = Math.min(runtime / duration, 1);
+      
+      setProgress(easeOutQuart(relativeProgress) * 100);
+
+      if (runtime < duration) {
+        requestAnimationFrame(updateProgress);
+      } else {
+        setTimeout(() => setLoading(false), 300);
+      }
+    };
+
+    requestAnimationFrame(updateProgress);
   }, []);
 
   return (
     <AnimatePresence>
       {loading && (
-        <motion.div
-          className="preloader"
-          exit={{ y: '-100%' }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-        >
-          <div className="preloader-content">
+        <div className="preloader">
+          {/* Top Half of the door */}
+          <motion.div
+            className="preloader-door preloader-door-top"
+            exit={{ y: '-100%' }}
+            transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+          />
+          
+          {/* Bottom Half of the door */}
+          <motion.div
+            className="preloader-door preloader-door-bottom"
+            exit={{ y: '100%' }}
+            transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+          />
+
+          {/* Central Content */}
+          <motion.div 
+            className="preloader-content"
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+          >
             <motion.div
               className="preloader-brand"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              initial={{ opacity: 0, letterSpacing: '0.1em' }}
+              animate={{ opacity: 1, letterSpacing: '0.3em' }}
+              transition={{ duration: 1.5, ease: 'easeOut' }}
             >
-              <span className="preloader-logo">CODE CRAFTED</span>
+              CODE CRAFTED
             </motion.div>
 
-            <div className="preloader-bar-container">
+            <div className="preloader-progress-wrapper">
               <motion.div
-                className="preloader-bar"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: Math.min(progress, 100) / 100 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
+                className="preloader-progress-bar"
+                style={{ scaleX: progress / 100 }}
               />
             </div>
 
-            <motion.span
-              className="preloader-percent"
+            <motion.div 
+              className="preloader-number"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.5 }}
             >
-              {Math.min(Math.round(progress), 100)}%
-            </motion.span>
-          </div>
+              {Math.floor(progress)}%
+            </motion.div>
+          </motion.div>
 
           <style>{`
             .preloader {
               position: fixed;
               inset: 0;
               z-index: 99999;
-              background: #081110;
               display: flex;
               align-items: center;
               justify-content: center;
+              pointer-events: none;
+            }
+            .preloader-door {
+              position: absolute;
+              left: 0;
+              width: 100%;
+              height: 50vh;
+              background: #081110;
+              z-index: 1;
+            }
+            .preloader-door-top {
+              top: 0;
+              border-bottom: 1px solid rgba(94, 234, 212, 0.05);
+            }
+            .preloader-door-bottom {
+              bottom: 0;
             }
             .preloader-content {
+              position: relative;
+              z-index: 2;
               display: flex;
               flex-direction: column;
               align-items: center;
-              gap: 2rem;
+              gap: 1.5rem;
             }
-            .preloader-logo {
+            .preloader-brand {
               font-family: 'Space Grotesk', sans-serif;
-              font-size: 1.5rem;
-              font-weight: 700;
-              letter-spacing: 0.2em;
+              font-size: 1.25rem;
+              font-weight: 600;
               color: #E6FFF9;
+              text-transform: uppercase;
             }
-            .preloader-bar-container {
+            .preloader-progress-wrapper {
               width: 200px;
-              height: 2px;
-              background: rgba(94, 234, 212, 0.1);
-              border-radius: 2px;
+              height: 1px;
+              background: rgba(255, 255, 255, 0.1);
+              position: relative;
               overflow: hidden;
             }
-            .preloader-bar {
+            .preloader-progress-bar {
+              position: absolute;
+              top: 0;
+              left: 0;
               width: 100%;
               height: 100%;
-              background: linear-gradient(90deg, #5EEAD4, #14B8A6);
+              background: var(--accent);
               transform-origin: left;
-              border-radius: 2px;
+              box-shadow: 0 0 10px var(--accent);
             }
-            .preloader-percent {
+            .preloader-number {
               font-family: 'Fira Code', monospace;
-              font-size: 0.8rem;
-              color: #5EEAD4;
+              font-size: 0.75rem;
+              color: var(--accent);
               letter-spacing: 0.1em;
             }
           `}</style>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

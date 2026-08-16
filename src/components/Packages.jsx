@@ -1,328 +1,578 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Check, X, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Check, ArrowUpRight, Zap, Star, Shield } from 'lucide-react';
 
-const packages = [
+const pricingTiers = [
   {
-    name: 'Starter',
-    price: '5,000',
-    desc: 'For simple websites',
-    included: ['1–3 pages', 'Basic UI design', 'Contact form', 'Basic animations', 'Basic SEO', 'Deployment assistance'],
-    excluded: ['Login system', 'Database', 'Admin panel', 'Backend API'],
-    popular: false,
-  },
-  {
-    name: 'Basic',
-    price: '10,000',
-    desc: 'For small business websites',
-    included: ['3–5 pages', 'React frontend', 'Contact form', 'Basic animations', 'Basic API integration', 'Deployment'],
-    excluded: ['Login system', 'Database', 'Admin panel'],
-    popular: false,
-  },
-  {
-    name: 'Professional',
+    name: 'Frontend MVP',
     price: '15,000',
-    desc: 'For growing businesses',
-    included: ['5–7 pages', 'React frontend', 'Fully responsive', 'Professional UI', 'Smooth animations', 'Contact form', 'Basic API integrations', 'SEO basics', 'Deployment', '7 days basic support'],
-    excluded: ['Database', 'Admin panel'],
-    popular: true,
+    icon: <Zap size={24} />,
+    desc: 'Perfect for landing pages and simple portfolios.',
+    features: [
+      'Up to 5 Pages',
+      'React Frontend',
+      'Framer Motion Animations',
+      'Contact Form Integration',
+      'Mobile Responsive',
+      'Basic SEO Setup'
+    ],
+    color: '#14B8A6'
   },
   {
-    name: 'Business',
-    price: '25,000',
-    desc: 'For serious business applications',
-    included: ['6–10 pages', 'React + Node.js + Express', 'MongoDB database', 'REST APIs', 'Login / Register', 'Authentication', 'CRUD operations', 'Basic Admin Panel', 'Search & filter', 'File upload', 'Responsive design', 'Deployment', '15 days support'],
-    excluded: [],
-    popular: false,
-  },
-  {
-    name: 'MERN',
+    name: 'MERN Ecosystem',
     price: '40,000',
-    desc: 'Full-stack MERN application',
-    included: ['8–12 pages', 'React + Node + Express + MongoDB', 'JWT authentication', 'Role-based access', 'User dashboard', 'Admin dashboard', 'CRUD operations', 'Search & filter', 'Pagination', 'File upload', 'API integrations', 'Notifications', 'Responsive design', 'Deployment', '30 days support'],
-    excluded: [],
-    popular: false,
+    icon: <Star size={24} />,
+    desc: 'Full-stack power for serious web applications.',
+    popular: true,
+    features: [
+      'Up to 12 Pages',
+      'React + Node.js + Express',
+      'MongoDB Database',
+      'JWT Authentication',
+      'Custom Admin Dashboard',
+      'REST API Development',
+      '30 Days Free Support'
+    ],
+    color: '#5EEAD4'
   },
   {
-    name: 'Custom',
-    price: '50,000+',
-    desc: 'For advanced web applications',
-    included: ['Custom pages', 'Custom features', 'Advanced authentication', 'Advanced admin panel', 'Multiple user roles', 'Payment integration', 'Third-party APIs', 'File management', 'Reports & analytics', 'Scalable backend', 'Custom database architecture', 'Deployment', 'Custom support plan'],
-    excluded: [],
-    popular: false,
-  },
+    name: 'Enterprise Scale',
+    price: '80,000',
+    icon: <Shield size={24} />,
+    desc: 'Complex architectures for growing businesses.',
+    features: [
+      'Unlimited Pages',
+      'Advanced Microservices',
+      'Payment Gateway Setup',
+      'Multiple User Roles',
+      'Real-time WebSockets',
+      'Advanced Analytics',
+      'Dedicated Maintenance'
+    ],
+    color: '#0D9488'
+  }
 ];
+
+// Interactive Spotlight Card Component
+function PricingCard({ tier, index, inView }) {
+  const cardRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className={`premium-pricing-card ${tier.popular ? 'is-popular' : ''}`}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: 0.2 + index * 0.15 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ y: -10 }}
+    >
+      {/* Animated Tracing Border for Popular Card */}
+      {tier.popular && (
+        <div className="tracing-beam-border" />
+      )}
+
+      {/* Mouse Spotlight Effect */}
+      <div 
+        className="card-spotlight"
+        style={{
+          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(94, 234, 212, ${isHovered ? 0.12 : 0}), transparent 40%)`
+        }}
+      />
+      
+      {tier.popular && (
+        <div className="popular-badge">
+          <Star size={12} fill="currentColor" className="spin-slow" /> MOST POPULAR
+        </div>
+      )}
+
+      <div className="card-inner-content">
+        <div className="tier-header">
+          <div className="tier-icon" style={{ color: tier.color, background: `${tier.color}15`, boxShadow: `0 0 20px ${tier.color}20` }}>
+            {tier.icon}
+          </div>
+          <h3 className="tier-name">{tier.name}</h3>
+        </div>
+
+        <div className="tier-pricing">
+          <span className="currency" style={{ color: tier.color }}>₹</span>
+          <span className="amount">{tier.price}</span>
+          <span className="billing">/project</span>
+        </div>
+        
+        <p className="tier-desc">{tier.desc}</p>
+
+        <div className="divider" />
+
+        <ul className="tier-features">
+          {tier.features.map((feature, i) => (
+            <motion.li 
+              key={i} 
+              className="feature-item"
+              initial={false}
+              animate={isHovered ? { x: 5 } : { x: 0 }}
+              transition={{ duration: 0.2, delay: i * 0.03 }}
+            >
+              <div className="feature-check" style={{ color: tier.color, background: `${tier.color}15` }}>
+                <Check size={12} strokeWidth={3} />
+              </div>
+              <span className="feature-text">{feature}</span>
+            </motion.li>
+          ))}
+        </ul>
+
+        <a 
+          href="#contact" 
+          className={`tier-btn ${tier.popular ? 'tier-btn-primary' : 'tier-btn-outline'}`}
+          style={{ '--btn-color': tier.color }}
+          onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+        >
+          Select Plan <ArrowUpRight size={16} />
+        </a>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Packages() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
-  const [expanded, setExpanded] = useState(null);
 
   return (
     <section id="packages" className="section packages-section" ref={ref}>
-      <div className="container">
+      {/* Animated Ambient Background Glows */}
+      <div className="pricing-ambient-glow glow-1" />
+      <div className="pricing-ambient-glow glow-2" />
+
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <motion.div
           className="packages-header"
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8 }}
         >
-          <span className="section-label">Pricing</span>
-          <h2 className="section-title">CHOOSE YOUR <span className="gradient-text">BUILD</span></h2>
+          <span className="section-label">Investment</span>
+          <h2 className="section-title">TRANSPARENT <span className="gradient-text">PRICING</span></h2>
           <p className="section-subtitle" style={{ margin: '0 auto' }}>
-            Simple, transparent pricing for every stage of your idea.
+            Elite engineering requires precise architecture. Choose the tier that fits your scale.
           </p>
         </motion.div>
 
-        <div className="packages-grid">
-          {packages.map((pkg, i) => (
-            <motion.div
-              key={pkg.name}
-              className={`package-card ${pkg.popular ? 'package-card--popular' : ''} ${expanded === i ? 'package-card--expanded' : ''}`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + i * 0.08 }}
-            >
-              {pkg.popular && (
-                <div className="package-badge">
-                  <Sparkles size={12} /> MOST POPULAR
-                </div>
-              )}
-
-              <div className="package-header">
-                <h3 className="package-name">{pkg.name}</h3>
-                <div className="package-price">
-                  <span className="package-currency">₹</span>
-                  <span className="package-amount">{pkg.price}</span>
-                </div>
-                <p className="package-desc">{pkg.desc}</p>
-              </div>
-
-              <div className="package-features">
-                {pkg.included.slice(0, expanded === i ? pkg.included.length : 5).map((f, fi) => (
-                  <div key={fi} className="package-feature">
-                    <Check size={14} className="package-feature-icon package-feature-icon--yes" />
-                    <span>{f}</span>
-                  </div>
-                ))}
-                {pkg.excluded.map((f, fi) => (
-                  <div key={fi} className="package-feature package-feature--no">
-                    <X size={14} className="package-feature-icon package-feature-icon--no" />
-                    <span>{f}</span>
-                  </div>
-                ))}
-              </div>
-
-              {pkg.included.length > 5 && (
-                <button
-                  className="package-toggle"
-                  onClick={() => setExpanded(expanded === i ? null : i)}
-                >
-                  {expanded === i ? 'Show less' : `+${pkg.included.length - 5} more features`}
-                </button>
-              )}
-
-              <a href="#contact" className={`btn ${pkg.popular ? 'btn-primary' : 'btn-outline'} package-cta`} data-cursor="OPEN" onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                Get Started <ArrowUpRight size={14} />
-              </a>
-            </motion.div>
+        <div className="premium-pricing-grid">
+          {pricingTiers.map((tier, i) => (
+            <PricingCard key={tier.name} tier={tier} index={i} inView={inView} />
           ))}
         </div>
 
         <motion.div
-          className="packages-custom-cta"
+          className="custom-enterprise-banner"
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
         >
-          <p>Have something bigger in mind?</p>
-          <a href="#contact" className="btn btn-outline" data-cursor="OPEN" onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
-            Let's Talk <ArrowUpRight size={14} />
-          </a>
+          <div className="banner-bg-glow" />
+          <div className="banner-content">
+            <div className="banner-text">
+              <h3>Need a Custom Solution?</h3>
+              <p>For specialized platforms, complex AI integrations, or dedicated offshore team extensions.</p>
+            </div>
+            <a href="#contact" className="banner-btn" onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              Let's Discuss Requirements <ArrowUpRight size={18} />
+            </a>
+          </div>
         </motion.div>
-
-        <motion.p
-          className="packages-note"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 1 }}
-        >
-          Domain, hosting, paid database plans and third-party services are billed separately.
-        </motion.p>
       </div>
 
       <style>{`
         .packages-section {
+          position: relative;
+          z-index: 2;
+          padding-top: 8rem;
+          padding-bottom: 8rem;
           border-top: 1px solid var(--border);
-          background: var(--bg-secondary);
+          overflow: hidden;
         }
+
+        /* Ambient Glows */
+        .pricing-ambient-glow {
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          border-radius: 50%;
+          filter: blur(100px);
+          opacity: 0.15;
+          pointer-events: none;
+          z-index: 0;
+          animation: floatOrb 10s ease-in-out infinite alternate;
+        }
+        .glow-1 {
+          top: 10%;
+          left: -10%;
+          background: #14B8A6;
+        }
+        .glow-2 {
+          bottom: 10%;
+          right: -10%;
+          background: #5EEAD4;
+          animation-delay: -5s;
+        }
+
+        @keyframes floatOrb {
+          0% { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+        
         .packages-header {
           text-align: center;
-          margin-bottom: 4rem;
-        }
-        .packages-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.25rem;
-        }
-        .package-card {
-          padding: 1.5rem;
-          border: 1px solid var(--glass-border);
-          border-radius: 12px;
-          background: var(--glass-bg);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          margin-bottom: 5rem;
           display: flex;
           flex-direction: column;
-          position: relative;
-          z-index: 1;
+          align-items: center;
         }
-        .package-card:hover {
-          border-color: var(--accent);
-          background: rgba(17, 32, 29, 0.6);
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(94, 234, 212, 0.1);
+
+        /* The Grid */
+        .premium-pricing-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2.5rem;
+          margin-bottom: 5rem;
+        }
+
+        /* The Card */
+        .premium-pricing-card {
+          position: relative;
+          background: rgba(10, 20, 18, 0.65);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 28px;
+          overflow: hidden;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          transition: border-color 0.4s, transform 0.4s;
+          display: flex;
+          flex-direction: column;
+        }
+        .premium-pricing-card:hover {
+          border-color: rgba(94, 234, 212, 0.3);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        
+        .is-popular {
+          background: rgba(17, 32, 29, 0.8);
+          border-color: transparent !important;
+          transform: scale(1.05);
           z-index: 10;
         }
-        .package-card--popular {
-          border-color: rgba(94, 234, 212, 0.3);
-          background: linear-gradient(180deg, rgba(94, 234, 212, 0.08) 0%, var(--glass-bg) 100%);
+        .is-popular:hover {
+          transform: scale(1.05) translateY(-10px);
         }
-        .package-card--popular:hover {
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(94, 234, 212, 0.2);
-        }
-        .package-badge {
+
+        /* Animated Tracing Border */
+        .tracing-beam-border {
           position: absolute;
-          top: -12px;
+          inset: 0;
+          border-radius: 28px;
+          padding: 2px;
+          background: conic-gradient(from 0deg, transparent 70%, var(--accent) 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          animation: spin-border 4s linear infinite;
+          pointer-events: none;
+        }
+        .is-popular::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 28px;
+          padding: 1px;
+          background: rgba(255,255,255,0.05);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+
+        @keyframes spin-border {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Spotlight & Glows */
+        .card-spotlight {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          transition: background 0.3s;
+        }
+
+        .popular-badge {
+          position: absolute;
+          top: 0;
           left: 50%;
-          transform: translateX(-50%);
-          padding: 0.35rem 1rem;
-          background: var(--accent-gradient);
-          color: #081110;
-          font-family: var(--font-mono);
-          font-size: 0.65rem;
-          font-weight: 600;
-          letter-spacing: 0.15em;
+          transform: translate(-50%, -50%);
+          background: var(--accent);
+          color: var(--bg-primary);
+          padding: 0.5rem 1.5rem;
           border-radius: 100px;
+          font-family: var(--font-mono);
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.15em;
           display: flex;
           align-items: center;
-          gap: 0.4rem;
-          white-space: nowrap;
+          gap: 0.6rem;
+          box-shadow: 0 0 25px rgba(94, 234, 212, 0.5);
+          z-index: 2;
         }
-        .package-header {
-          margin-bottom: 1.5rem;
-          padding-bottom: 1.5rem;
-          border-bottom: 1px solid var(--border);
+
+        .spin-slow {
+          animation: spin 3s linear infinite;
         }
-        .package-name {
-          font-size: 1.1rem;
-          font-weight: 600;
-          margin-bottom: 0.75rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Inner Content */
+        .card-inner-content {
+          position: relative;
+          z-index: 1;
+          padding: 3.5rem 2.5rem;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
         }
-        .package-price {
+
+        .tier-header {
+          display: flex;
+          align-items: center;
+          gap: 1.25rem;
+          margin-bottom: 2rem;
+        }
+        .tier-icon {
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.3s;
+        }
+        .premium-pricing-card:hover .tier-icon {
+          transform: scale(1.1) rotate(5deg);
+        }
+        
+        .tier-name {
+          font-family: var(--font-display);
+          font-size: 1.6rem;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+
+        .tier-pricing {
           display: flex;
           align-items: baseline;
           gap: 0.25rem;
-          margin-bottom: 0.5rem;
+          margin-bottom: 1rem;
         }
-        .package-currency {
-          font-size: 1.25rem;
-          color: var(--accent);
-          font-weight: 500;
+        .currency {
+          font-size: 1.5rem;
+          font-weight: 600;
         }
-        .package-amount {
+        .amount {
           font-family: var(--font-display);
-          font-size: 2rem;
-          font-weight: 700;
+          font-size: 3.8rem;
+          font-weight: 800;
           color: var(--text-primary);
           line-height: 1;
+          letter-spacing: -0.04em;
+          background: linear-gradient(180deg, #fff 0%, #a0a0a0 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
-        .package-desc {
-          font-size: 0.8rem;
+        .billing {
+          font-size: 0.95rem;
           color: var(--text-dim);
-        }
-        .package-features {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.6rem;
-          margin-bottom: 1.25rem;
-        }
-        .package-feature {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          font-size: 0.85rem;
-          color: var(--text-muted);
-        }
-        .package-feature--no span {
-          color: var(--text-dim);
-          text-decoration: line-through;
-        }
-        .package-feature-icon--yes {
-          color: var(--accent);
-          flex-shrink: 0;
-        }
-        .package-feature-icon--no {
-          color: var(--text-dim);
-          flex-shrink: 0;
-        }
-        .package-toggle {
-          font-size: 0.8rem;
-          color: var(--accent);
-          margin-bottom: 1rem;
-          text-align: left;
-          font-family: var(--font-mono);
-          letter-spacing: 0.02em;
-          transition: opacity 0.3s;
-        }
-        .package-toggle:hover {
-          opacity: 0.7;
-        }
-        .package-cta {
-          width: 100%;
-          justify-content: center;
-          margin-top: auto;
-        }
-        .packages-custom-cta {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 1.5rem;
-          margin-top: 3rem;
-          padding: 1.5rem;
-          border: 1px solid var(--glass-border);
-          border-radius: 12px;
-          background: var(--glass-bg);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-        }
-        .packages-custom-cta p {
-          font-size: 1rem;
-          color: var(--text-muted);
-        }
-        .packages-note {
-          text-align: center;
-          font-size: 0.8rem;
-          color: var(--text-dim);
-          margin-top: 2rem;
+          font-weight: 500;
         }
 
-        @media (max-width: 1100px) {
-          .packages-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
+        .tier-desc {
+          font-size: 1rem;
+          color: var(--text-muted);
+          line-height: 1.6;
+          margin-bottom: 2.5rem;
         }
-        @media (max-width: 650px) {
-          .packages-grid {
+
+        .divider {
+          height: 1px;
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+          margin-bottom: 2.5rem;
+        }
+
+        .tier-features {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
+          flex: 1;
+        }
+        .feature-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          font-size: 0.95rem;
+          color: var(--text-muted);
+          transition: color 0.3s;
+        }
+        .premium-pricing-card:hover .feature-item {
+          color: var(--text-primary);
+        }
+        .feature-check {
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+
+        /* Buttons */
+        .tier-btn {
+          margin-top: 3rem;
+          width: 100%;
+          padding: 1.25rem;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          font-family: var(--font-mono);
+          font-size: 0.95rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          text-decoration: none;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .tier-btn-outline {
+          background: rgba(255,255,255,0.03);
+          color: var(--text-primary);
+          border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tier-btn-outline:hover {
+          background: rgba(255,255,255,0.08);
+          border-color: var(--btn-color);
+          box-shadow: 0 0 20px rgba(255,255,255,0.05);
+          transform: translateY(-3px);
+        }
+        
+        .tier-btn-primary {
+          background: var(--text-primary);
+          color: var(--bg-primary);
+          border: 1px solid transparent;
+        }
+        .tier-btn-primary:hover {
+          background: var(--btn-color);
+          box-shadow: 0 10px 30px rgba(94, 234, 212, 0.4);
+          transform: translateY(-4px);
+        }
+
+        /* Banner */
+        .custom-enterprise-banner {
+          position: relative;
+          background: rgba(17, 32, 29, 0.4);
+          border: 1px solid rgba(94, 234, 212, 0.2);
+          border-radius: 28px;
+          padding: 4rem;
+          overflow: hidden;
+          backdrop-filter: blur(12px);
+        }
+        .banner-bg-glow {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 100% 50%, rgba(94, 234, 212, 0.15) 0%, transparent 50%);
+          pointer-events: none;
+        }
+        .banner-content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+        }
+        .banner-text h3 {
+          font-family: var(--font-display);
+          font-size: 2.2rem;
+          font-weight: 800;
+          margin-bottom: 0.5rem;
+          color: var(--text-primary);
+        }
+        .banner-text p {
+          font-size: 1.1rem;
+          color: var(--text-muted);
+        }
+        .banner-btn {
+          flex-shrink: 0;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1.25rem 2.5rem;
+          background: rgba(94, 234, 212, 0.1);
+          color: var(--accent);
+          border: 1px solid var(--accent);
+          border-radius: 100px;
+          font-family: var(--font-mono);
+          font-size: 0.95rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-decoration: none;
+          transition: all 0.3s;
+        }
+        .banner-btn:hover {
+          background: var(--accent);
+          color: var(--bg-primary);
+          box-shadow: 0 10px 30px rgba(94, 234, 212, 0.4);
+          transform: translateY(-3px);
+        }
+
+        @media (max-width: 1024px) {
+          .premium-pricing-grid {
             grid-template-columns: 1fr;
+            max-width: 600px;
+            margin: 0 auto 4rem auto;
+            gap: 3rem;
           }
-          .packages-custom-cta {
+          .is-popular {
+            transform: scale(1);
+          }
+          .is-popular:hover {
+            transform: translateY(-10px);
+          }
+          .banner-content {
             flex-direction: column;
             text-align: center;
+          }
+          .custom-enterprise-banner {
+            padding: 3rem 2rem;
           }
         }
       `}</style>

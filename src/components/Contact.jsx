@@ -1,20 +1,18 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowUpRight, Mail, Phone, Send } from 'lucide-react';
+import { ArrowUpRight, Mail, MessageCircle, Send, CheckCircle2 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 
 const WHATSAPP_NUMBER = '918799462715';
 
 function buildWhatsAppMessage(data) {
   const lines = [
-    `🚀 *New Project Inquiry — Code Crafted*`,
+    `🚀 *New Project Inquiry*`,
     ``,
     `👤 *Name:* ${data.name}`,
     `📧 *Email:* ${data.email}`,
   ];
-  if (data.company) lines.push(`🏢 *Company:* ${data.company}`);
-  if (data.projectType) lines.push(`📂 *Project Type:* ${data.projectType}`);
-  if (data.budget) lines.push(`💰 *Budget:* ${data.budget}`);
+  if (data.service) lines.push(`📂 *Service:* ${data.service}`);
   lines.push(``, `💬 *Message:*`, data.message, ``, `— Sent from codecrafted.dev`);
   return lines.join('\n');
 }
@@ -22,14 +20,12 @@ function buildWhatsAppMessage(data) {
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
-  const [formData, setFormData] = useState({
-    name: '', email: '', company: '', projectType: '', budget: '', message: '',
-  });
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const [formData, setFormData] = useState({ name: '', email: '', service: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,313 +34,446 @@ export default function Contact() {
     window.open(url, '_blank');
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 4000);
-    setFormData({ name: '', email: '', company: '', projectType: '', budget: '', message: '' });
+    setFormData({ name: '', email: '', service: '', message: '' });
   };
 
-  const socials = [
-    { icon: <Mail size={18} />, label: 'Email', href: 'mailto:d.baria2411@gmail.com', value: 'd.baria2411@gmail.com' },
-    { icon: <Phone size={18} />, label: 'WhatsApp', href: 'https://wa.me/918799462715', value: '+91 87994 62715' },
-    { icon: <GithubIcon size={18} />, label: 'GitHub', href: 'https://github.com/dharmendrabaria', value: 'github.com/dharmendrabaria' },
-    { icon: <LinkedinIcon size={18} />, label: 'LinkedIn', href: 'https://www.linkedin.com/in/dharmendra-baria-579b31312', value: 'Dharmendra Baria' },
-    { icon: <InstagramIcon size={18} />, label: 'Instagram', href: 'https://www.instagram.com/_.code._crafted', value: '@_.code._crafted' },
-  ];
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('d.baria2411@gmail.com');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.08 } },
+    visible: { transition: { staggerChildren: 0.1 } }
   };
-  const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
   };
 
   return (
     <section id="contact" className="section contact-section" ref={ref}>
-      <div className="contact-glow" />
-      <div className="contact-glow contact-glow-2" />
+      <div className="contact-bg-glow" />
 
       <div className="container">
         <motion.div
           className="contact-header"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8 }}
         >
-          <span className="section-label">Get In Touch</span>
-          <h2 className="section-title">LET'S BUILD SOMETHING <span className="gradient-text">GREAT.</span></h2>
-          <p className="section-subtitle" style={{ margin: '0 auto' }}>
-            Have a project in mind? Tell me about it and let's turn the idea into something real.
-          </p>
+          <span className="section-label">Collaboration</span>
+          <h2 className="section-title">LET'S WORK <span className="gradient-text">TOGETHER</span></h2>
         </motion.div>
 
-        <div className="contact-grid">
-          <motion.form
-            className="contact-form"
-            onSubmit={handleSubmit}
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-          >
-            <motion.div className="contact-form-row" variants={itemVariants}>
-              <div className="contact-field">
-                <label htmlFor="contact-name">Name *</label>
-                <input type="text" id="contact-name" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required />
-              </div>
-              <div className="contact-field">
-                <label htmlFor="contact-email">Email *</label>
-                <input type="email" id="contact-email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required />
-              </div>
-            </motion.div>
+        <motion.div
+          className="bento-grid"
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
+          {/* Main Form Card (Spans 2 columns) */}
+          <motion.div className="bento-card bento-form-card" variants={cardVariants}>
+            <div className="card-glare" />
+            <div className="bento-header">
+              <h3>Send a Message</h3>
+              <p>Fill out the form below and I'll get back to you within 24 hours.</p>
+            </div>
 
-            <motion.div className="contact-form-row" variants={itemVariants}>
-              <div className="contact-field">
-                <label htmlFor="contact-company">Company</label>
-                <input type="text" id="contact-company" name="company" value={formData.company} onChange={handleChange} placeholder="Your company" />
+            <form onSubmit={handleSubmit} className="bento-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
+                </div>
+                <div className="form-group">
+                  <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required />
+                </div>
               </div>
-              <div className="contact-field">
-                <label htmlFor="contact-type">Project Type</label>
-                <select id="contact-type" name="projectType" value={formData.projectType} onChange={handleChange}>
-                  <option value="">Select type</option>
-                  <option value="Website">Website</option>
-                  <option value="React Application">React Application</option>
-                  <option value="MERN Full-Stack">MERN Full-Stack</option>
-                  <option value="Admin Dashboard">Admin Dashboard</option>
-                  <option value="API Development">API Development</option>
-                  <option value="Other">Other</option>
+
+              <div className="form-group">
+                <select name="service" value={formData.service} onChange={handleChange} required>
+                  <option value="" disabled hidden>Select Service</option>
+                  <option value="Website Development">Website Development</option>
+                  <option value="Full-Stack Application">Full-Stack Application</option>
+                  <option value="UI/UX Design">UI/UX Design</option>
+                  <option value="Other">Other Inquiry</option>
                 </select>
               </div>
-            </motion.div>
 
-            <motion.div className="contact-field" variants={itemVariants}>
-              <label htmlFor="contact-budget">Budget Range</label>
-              <select id="contact-budget" name="budget" value={formData.budget} onChange={handleChange}>
-                <option value="">Select budget</option>
-                <option value="₹5,000 – ₹10,000">₹5,000 – ₹10,000</option>
-                <option value="₹10,000 – ₹15,000">₹10,000 – ₹15,000</option>
-                <option value="₹15,000 – ₹25,000">₹15,000 – ₹25,000</option>
-                <option value="₹25,000 – ₹40,000">₹25,000 – ₹40,000</option>
-                <option value="₹40,000 – ₹50,000">₹40,000 – ₹50,000</option>
-                <option value="₹50,000+">₹50,000+</option>
-              </select>
-            </motion.div>
+              <div className="form-group">
+                <textarea name="message" placeholder="Tell me about your project..." value={formData.message} onChange={handleChange} rows={4} required />
+              </div>
 
-            <motion.div className="contact-field" variants={itemVariants}>
-              <label htmlFor="contact-message">Message *</label>
-              <textarea id="contact-message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={5} required />
-            </motion.div>
-
-            <motion.button type="submit" className="btn btn-primary contact-submit" data-cursor="SEND" variants={itemVariants}>
-              {submitted ? '✓ Sent to WhatsApp!' : <>Send Message <ArrowUpRight size={16} /></>}
-            </motion.button>
-          </motion.form>
-
-          <motion.div
-            className="contact-info"
-            initial={{ opacity: 0, x: 60 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h3 className="contact-info-heading">Let's connect</h3>
-            <p className="contact-info-text">
-              Whether you have a detailed project brief or just an idea, feel free to reach out. I'm always open to discussing new projects and opportunities.
-            </p>
-
-            <div className="contact-socials">
-              {socials.map((s, i) => (
-                <motion.a
-                  key={i}
-                  href={s.href}
-                  className="contact-social"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor="OPEN"
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.5 + i * 0.08 }}
-                >
-                  <div className="contact-social-icon">{s.icon}</div>
-                  <div>
-                    <span className="contact-social-label">{s.label}</span>
-                    <span className="contact-social-value">{s.value}</span>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
+              <button type="submit" className="bento-submit-btn" disabled={submitted}>
+                {submitted ? (
+                  <span className="success"><CheckCircle2 size={18} /> Sent to WhatsApp</span>
+                ) : (
+                  <span>Launch Project <Send size={16} className="btn-icon" /></span>
+                )}
+              </button>
+            </form>
           </motion.div>
-        </div>
+
+          {/* Right Side Column */}
+          <div className="bento-right-col">
+
+            {/* Email Card */}
+            <motion.div className="bento-card bento-mini-card" variants={cardVariants}>
+              <div className="bento-mini-content">
+                <div className="mini-icon-box"><Mail size={24} /></div>
+                <div>
+                  <h4>Email Me</h4>
+                  <p>d.baria2411@gmail.com</p>
+                </div>
+              </div>
+              <button className="copy-btn" onClick={handleCopyEmail}>
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </motion.div>
+
+            {/* WhatsApp Card */}
+            <motion.a
+              href="https://wa.me/918799462715"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bento-card bento-mini-card whatsapp-card"
+              variants={cardVariants}
+            >
+              <div className="bento-mini-content">
+                <div className="mini-icon-box whatsapp-box"><MessageCircle size={24} /></div>
+                <div>
+                  <h4>WhatsApp</h4>
+                  <p>+91 87994 62715</p>
+                </div>
+              </div>
+              <ArrowUpRight className="wa-arrow" size={20} />
+            </motion.a>
+
+            {/* Socials Card */}
+            <motion.div className="bento-card bento-social-card" variants={cardVariants}>
+              <h4>Connect</h4>
+              <div className="social-links-row">
+                <a href="https://github.com/dharmendrabaria" target="_blank" rel="noopener noreferrer" className="bento-social-btn">
+                  <GithubIcon size={22} />
+                </a>
+                <a href="https://www.linkedin.com/in/dharmendra-baria-579b31312" target="_blank" rel="noopener noreferrer" className="bento-social-btn">
+                  <LinkedinIcon size={22} />
+                </a>
+                <a href="https://www.instagram.com/_.code._crafted" target="_blank" rel="noopener noreferrer" className="bento-social-btn">
+                  <InstagramIcon size={22} />
+                </a>
+              </div>
+            </motion.div>
+
+          </div>
+        </motion.div>
       </div>
 
       <style>{`
         .contact-section {
-          border-top: 1px solid var(--border);
-          background: var(--bg-secondary);
+          padding-top: 8rem;
+          padding-bottom: 0;
+          background: var(--bg-primary);
           position: relative;
           overflow: hidden;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .contact-glow {
+
+        .contact-bg-glow {
           position: absolute;
-          width: 600px;
-          height: 600px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(94, 234, 212, 0.06) 0%, transparent 70%);
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, rgba(94, 234, 212, 0.04) 0%, transparent 60%);
+          top: 0;
+          right: -20%;
           pointer-events: none;
         }
-        .contact-glow-2 {
-          width: 400px;
-          height: 400px;
-          top: 20%;
-          left: 10%;
-          background: radial-gradient(circle, rgba(20, 184, 166, 0.04) 0%, transparent 70%);
-        }
+
         .contact-header {
           text-align: center;
-          margin-bottom: 4rem;
-          position: relative;
-          z-index: 1;
+          margin-bottom: 5rem;
         }
-        .contact-grid {
+
+        /* Bento Grid System */
+        .bento-grid {
           display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          gap: 4rem;
-          position: relative;
-          z-index: 1;
+          grid-template-columns: 1.5fr 1fr;
+          gap: 1.5rem;
+          max-width: 1100px;
+          margin: 0 auto;
         }
-        .contact-form {
+
+        .bento-right-col {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .bento-card {
+          background: rgba(17, 32, 29, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 24px;
+          padding: 2.5rem;
+          position: relative;
+          overflow: hidden;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .bento-card:hover {
+          border-color: rgba(94, 234, 212, 0.2);
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-glare {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(125deg, rgba(255,255,255,0.05) 0%, transparent 40%);
+          pointer-events: none;
+        }
+
+        /* Form Card */
+        .bento-form-card {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .bento-header h3 {
+          font-family: var(--font-display);
+          font-size: 2rem;
+          margin-bottom: 0.5rem;
+        }
+        .bento-header p {
+          color: var(--text-muted);
+          font-size: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .bento-form {
           display: flex;
           flex-direction: column;
           gap: 1.25rem;
         }
-        .contact-form-row {
+
+        .form-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1.25rem;
         }
-        .contact-field {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        .contact-field label {
-          font-size: 0.8rem;
-          font-weight: 500;
-          color: var(--text-muted);
-          letter-spacing: 0.02em;
-        }
-        .contact-field input,
-        .contact-field select,
-        .contact-field textarea {
-          background: var(--bg-primary);
-          border: 1px solid var(--border);
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          width: 100%;
+          background: rgba(0, 0, 0, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 12px;
-          padding: 0.875rem 1rem;
+          padding: 1.2rem;
           color: var(--text-primary);
           font-family: var(--font-body);
-          font-size: 0.9rem;
-          transition: all 0.3s var(--ease-out);
+          font-size: 1rem;
           outline: none;
+          transition: all 0.3s;
         }
-        .contact-field input:focus,
-        .contact-field select:focus,
-        .contact-field textarea:focus {
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
           border-color: var(--accent);
-          box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.1);
+          background: rgba(94, 234, 212, 0.03);
+          box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.1);
         }
-        .contact-field input::placeholder,
-        .contact-field textarea::placeholder {
-          color: var(--text-dim);
-        }
-        .contact-field select {
+        
+        .form-group select {
           appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA9A6' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 1rem center;
+          cursor: pointer;
         }
-        .contact-field select option {
-          background: var(--bg-primary);
-          color: var(--text-primary);
-        }
-        .contact-field textarea {
+        .form-group textarea {
           resize: vertical;
           min-height: 120px;
         }
-        .contact-submit {
-          align-self: flex-start;
-          padding: 1rem 2.5rem;
-        }
-        .contact-info {
-          padding: 2.5rem;
-          border: 1px solid var(--border);
-          border-radius: 20px;
-          background: var(--bg-primary);
-          align-self: start;
-        }
-        .contact-info-heading {
-          font-size: 1.5rem;
-          margin-bottom: 1rem;
-        }
-        .contact-info-text {
-          font-size: 0.9rem;
-          color: var(--text-muted);
-          line-height: 1.7;
-          margin-bottom: 2rem;
-        }
-        .contact-socials {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-        .contact-social {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1rem;
-          border: 1px solid var(--border);
+
+        .bento-submit-btn {
+          width: 100%;
+          padding: 1.25rem;
+          background: var(--accent);
+          color: #000;
+          border: none;
           border-radius: 12px;
-          transition: all 0.3s var(--ease-out);
-        }
-        .contact-social:hover {
-          border-color: var(--accent);
-          background: rgba(94, 234, 212, 0.05);
-          transform: translateX(4px);
-        }
-        .contact-social-icon {
-          width: 36px;
-          height: 36px;
+          font-family: var(--font-mono);
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: 0.05em;
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 10px;
-          background: rgba(94, 234, 212, 0.08);
+          gap: 0.75rem;
+          transition: all 0.3s;
+          margin-top: 0.5rem;
+        }
+        
+        .bento-submit-btn:hover {
+          background: #4de3cd;
+          box-shadow: 0 10px 25px rgba(94, 234, 212, 0.3);
+          transform: translateY(-2px);
+        }
+
+        .bento-submit-btn .btn-icon {
+          transition: transform 0.3s;
+        }
+        .bento-submit-btn:hover .btn-icon {
+          transform: translateX(4px) translateY(-4px);
+        }
+
+        .bento-submit-btn:disabled {
+          background: rgba(94, 234, 212, 0.2);
           color: var(--accent);
-          flex-shrink: 0;
+          cursor: not-allowed;
+          box-shadow: none;
+          transform: none;
+        }
+        
+        .success {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        /* Mini Cards */
+        .bento-mini-card {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 2rem;
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .bento-mini-content {
+          display: flex;
+          align-items: center;
+          gap: 1.25rem;
+        }
+
+        .mini-icon-box {
+          width: 50px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-primary);
           transition: all 0.3s;
         }
-        .contact-social:hover .contact-social-icon {
-          background: rgba(94, 234, 212, 0.15);
-          box-shadow: 0 0 15px rgba(94, 234, 212, 0.1);
+        
+        .whatsapp-box {
+          background: rgba(37, 211, 102, 0.1);
+          color: #25D366;
         }
-        .contact-social-label {
-          display: block;
-          font-size: 0.75rem;
+
+        .bento-mini-card h4 {
+          font-size: 1.1rem;
+          margin-bottom: 0.2rem;
+        }
+        .bento-mini-card p {
           color: var(--text-dim);
-          font-family: var(--font-mono);
-          letter-spacing: 0.05em;
+          font-size: 0.9rem;
         }
-        .contact-social-value {
-          display: block;
-          font-size: 0.85rem;
-          font-weight: 500;
+
+        .copy-btn {
+          background: rgba(255, 255, 255, 0.08);
+          border: none;
+          color: var(--text-primary);
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          cursor: pointer;
+          transition: all 0.3s;
         }
-        @media (max-width: 900px) {
-          .contact-grid {
+        .copy-btn:hover {
+          background: rgba(255, 255, 255, 0.15);
+        }
+
+        .whatsapp-card:hover .whatsapp-box {
+          background: #25D366;
+          color: #fff;
+        }
+        .wa-arrow {
+          color: var(--text-dim);
+          transition: all 0.3s;
+        }
+        .whatsapp-card:hover .wa-arrow {
+          color: #25D366;
+          transform: translate(4px, -4px);
+        }
+
+        /* Social Card */
+        .bento-social-card {
+          padding: 2rem;
+        }
+        .bento-social-card h4 {
+          margin-bottom: 1.25rem;
+          font-size: 1.1rem;
+        }
+        .social-links-row {
+          display: flex;
+          gap: 1rem;
+        }
+        .bento-social-btn {
+          flex: 1;
+          height: 60px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-primary);
+          transition: all 0.3s;
+        }
+        .bento-social-btn:hover {
+          background: rgba(94, 234, 212, 0.1);
+          border-color: var(--accent);
+          color: var(--accent);
+          transform: translateY(-3px);
+        }
+
+        @media (max-width: 1024px) {
+          .bento-grid {
             grid-template-columns: 1fr;
-            gap: 3rem;
           }
-          .contact-form-row {
+          .bento-right-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+          .bento-social-card {
+            grid-column: span 2;
+          }
+        }
+        
+        @media (max-width: 650px) {
+          .bento-right-col {
             grid-template-columns: 1fr;
+          }
+          .bento-social-card {
+            grid-column: span 1;
+          }
+          .form-row {
+            grid-template-columns: 1fr;
+          }
+          .bento-card {
+            padding: 1.5rem;
           }
         }
       `}</style>

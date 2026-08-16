@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
 import { GithubIcon } from './SocialIcons';
 
@@ -7,109 +7,116 @@ const projects = [
   {
     num: '01',
     title: 'ReelMatic',
-    desc: 'A premium video production and creative agency management platform for Instagram reel production.',
+    desc: 'A premium video production and creative agency management platform. Built to handle complex lead tracking, interactive pricing engines, and seamless client onboarding for high-end Instagram reel production.',
     tech: ['React', 'Node.js', 'Express', 'MongoDB'],
-    features: ['Booking System', 'Pricing Engine', 'Lead Management', 'CMS Dashboard'],
     live: 'https://reelmatic-by-vivek.vercel.app',
     github: '#',
-    image: null,
     color: '#5EEAD4',
   },
   {
     num: '02',
     title: 'FlowForge',
-    desc: 'A collaborative project management system with kanban boards, task tracking and team workflows.',
+    desc: 'A collaborative project management ecosystem featuring real-time kanban boards, task tracking, and role-based team workflows. Engineered for speed and scalability.',
     tech: ['React', 'Node.js', 'MongoDB', 'JWT Auth'],
-    features: ['Kanban Boards', 'Team Management', 'Real-time Updates', 'Role-based Access'],
     live: '#',
     github: '#',
-    image: null,
     color: '#14B8A6',
   },
   {
     num: '03',
     title: 'DevConnect',
-    desc: 'A developer portfolio and networking platform connecting tech professionals with opportunities.',
+    desc: 'A specialized networking platform connecting elite tech professionals with opportunities. Features advanced filtering, messaging, and automated portfolio generation.',
     tech: ['React', 'Express.js', 'MongoDB', 'REST API'],
-    features: ['User Profiles', 'Search & Filter', 'Messaging', 'Portfolio Builder'],
     live: '#',
     github: '#',
-    image: null,
     color: '#2dd4bf',
   },
 ];
 
-function ProjectCard({ project, index, inView }) {
-  const [hovered, setHovered] = useState(false);
-  const isReversed = index % 2 !== 0;
+function ProjectCard({ project, index, targetScale }) {
+  const cardRef = useRef(null);
+  
+  // Parallax effect for the inner content
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ['start end', 'start start']
+  });
+  
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.2, 1]);
 
   return (
-    <motion.div
-      className={`project-card ${isReversed ? 'project-card--reversed' : ''}`}
-      initial={{ opacity: 0, y: 60 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: 0.2 + index * 0.15 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      data-cursor="VIEW"
-    >
-      <div className="project-preview">
-        <div className="project-preview-inner" style={{ background: `linear-gradient(135deg, ${project.color}10, ${project.color}05)` }}>
-          <div className="project-preview-content">
-            <span className="project-preview-num" style={{ color: project.color }}>{project.num}</span>
-            <span className="project-preview-name">{project.title}</span>
-            <div className="project-preview-code">
-              <span style={{ color: '#c792ea' }}>{'<'}</span>
-              <span style={{ color: project.color }}>{project.title}</span>
-              <span style={{ color: '#c792ea' }}>{' />'}</span>
+    <div className="project-card-container">
+      <motion.div 
+        className="project-card" 
+        ref={cardRef}
+        style={{ 
+          scale: targetScale,
+          top: `calc(10vh + ${index * 30}px)` 
+        }}
+      >
+        <div className="project-card-glow" style={{ background: `radial-gradient(circle at 80% 0%, ${project.color}20 0%, transparent 60%)` }} />
+        
+        <div className="project-content">
+          <div className="project-info">
+            <div className="project-header">
+              <span className="project-num" style={{ color: project.color }}>{project.num}</span>
+              <h3 className="project-title">{project.title}</h3>
+            </div>
+            
+            <p className="project-desc">{project.desc}</p>
+            
+            <div className="project-tech">
+              {project.tech.map((t, i) => (
+                <span key={i} className="project-tech-tag">{t}</span>
+              ))}
+            </div>
+            
+            <div className="project-links">
+              <a href={project.live} className="project-link primary-link" target="_blank" rel="noopener noreferrer" style={{ '--hover-color': project.color }}>
+                <span>Live Demo</span> <ArrowUpRight size={18} />
+              </a>
+              <a href={project.github} className="project-link secondary-link" target="_blank" rel="noopener noreferrer">
+                <GithubIcon size={18} /> <span>Source</span>
+              </a>
             </div>
           </div>
-          <motion.div
-            className="project-preview-overlay"
-            animate={{ opacity: hovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ArrowUpRight size={32} />
-          </motion.div>
+          
+          <div className="project-visual">
+            <motion.div className="browser-mockup" style={{ scale: imageScale }}>
+              <div className="browser-header">
+                <span className="browser-dot close" />
+                <span className="browser-dot min" />
+                <span className="browser-dot max" />
+              </div>
+              <div className="browser-body" style={{ background: `linear-gradient(135deg, rgba(17,32,29,0.9), ${project.color}15)` }}>
+                <div className="mockup-content">
+                  <span className="mockup-logo" style={{ color: project.color }}>{project.title}</span>
+                  <div className="mockup-lines">
+                    <div className="mockup-line w-3/4" />
+                    <div className="mockup-line w-1/2" />
+                    <div className="mockup-line w-5/6" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </div>
-
-      <div className="project-info">
-        <span className="project-num">{project.num}</span>
-        <h3 className="project-title">{project.title}</h3>
-        <p className="project-desc">{project.desc}</p>
-
-        <div className="project-features">
-          {project.features.map((f, i) => (
-            <span key={i} className="project-feature">{f}</span>
-          ))}
-        </div>
-
-        <div className="project-tech">
-          {project.tech.map((t, i) => (
-            <span key={i} className="project-tech-tag">{t}</span>
-          ))}
-        </div>
-
-        <div className="project-links">
-          <a href={project.live} className="project-link" target="_blank" rel="noopener noreferrer" data-cursor="OPEN">
-            <ExternalLink size={16} /> Live Demo
-          </a>
-          <a href={project.github} className="project-link" target="_blank" rel="noopener noreferrer" data-cursor="OPEN">
-            <GithubIcon size={16} /> GitHub
-          </a>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
 export default function Work() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
+  const containerRef = useRef(null);
+  const inView = useInView(containerRef, { once: true, margin: '-100px' });
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end']
+  });
 
   return (
-    <section id="work" className="section work-section" ref={ref}>
+    <section id="work" className="section work-section" ref={containerRef}>
       <div className="container">
         <motion.div
           className="work-header"
@@ -117,185 +124,285 @@ export default function Work() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
-          <span className="section-label">Portfolio</span>
-          <h2 className="section-title">SELECTED <span className="gradient-text">WORK</span></h2>
-          <p className="section-subtitle" style={{ margin: '0 auto' }}>
-            Things I've built, shipped and crafted.
-          </p>
+          <span className="section-label">Selected Projects</span>
+          <h2 className="section-title">THE <span className="gradient-text">PORTFOLIO</span></h2>
         </motion.div>
 
-        <div className="projects-list">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.num} project={project} index={i} inView={inView} />
-          ))}
+        <div className="projects-stack">
+          {projects.map((project, i) => {
+            // Calculate scale down for previous cards
+            const targetScale = useTransform(
+              scrollYProgress,
+              [i * (1 / projects.length), 1],
+              [1, 1 - (projects.length - i) * 0.02]
+            );
+            
+            return (
+              <ProjectCard 
+                key={project.num} 
+                project={project} 
+                index={i} 
+                targetScale={targetScale} 
+              />
+            );
+          })}
         </div>
       </div>
 
       <style>{`
         .work-section {
-          border-top: 1px solid var(--border);
+          position: relative;
+          z-index: 2;
+          padding-top: 6rem;
+          padding-bottom: 10rem;
         }
         .work-header {
           text-align: center;
-          margin-bottom: 5rem;
-        }
-        .projects-list {
+          margin-bottom: 6rem;
           display: flex;
           flex-direction: column;
-          gap: 6rem;
-        }
-        .project-card {
-          display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 4rem;
           align-items: center;
         }
-        .project-card--reversed {
-          direction: rtl;
-        }
-        .project-card--reversed > * {
-          direction: ltr;
-        }
-
-        /* Preview */
-        .project-preview {
-          border-radius: 16px;
-          overflow: hidden;
-          border: 1px solid var(--glass-border);
-          transition: border-color 0.3s;
-          background: var(--glass-bg);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-        }
-        .project-card:hover .project-preview {
-          border-color: var(--border-hover);
-        }
-        .project-preview-inner {
-          aspect-ratio: 16 / 9;
+        
+        .projects-stack {
           display: flex;
-          align-items: center;
-          justify-content: center;
+          flex-direction: column;
+          gap: 4rem; /* Gap when scrolling normally */
           position: relative;
-          overflow: hidden;
-          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .project-card:hover .project-preview-inner {
-          transform: scale(1.04);
-        }
-        .project-preview-content {
+        
+        .project-card-container {
+          position: sticky;
+          top: 10vh;
+          height: 80vh;
+          max-height: 600px;
           display: flex;
-          flex-direction: column;
           align-items: center;
-          gap: 0.5rem;
-          text-align: center;
         }
-        .project-preview-num {
-          font-family: var(--font-mono);
-          font-size: 0.7rem;
-          letter-spacing: 0.2em;
+        
+        .project-card {
+          width: 100%;
+          height: 100%;
+          background: rgba(17, 32, 29, 0.7);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 32px;
+          overflow: hidden;
+          position: relative;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          transform-origin: top center;
+          box-shadow: 0 -20px 40px rgba(0,0,0,0.4);
         }
-        .project-preview-name {
-          font-family: var(--font-display);
-          font-size: 2rem;
-          font-weight: 700;
-          color: var(--text-primary);
-        }
-        .project-preview-code {
-          font-family: var(--font-mono);
-          font-size: 0.75rem;
-          opacity: 0.5;
-        }
-        .project-preview-overlay {
+        
+        .project-card-glow {
           position: absolute;
           inset: 0;
-          background: rgba(94, 234, 212, 0.08);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--accent);
+          pointer-events: none;
+          z-index: 0;
         }
-
-        /* Info */
+        
+        .project-content {
+          position: relative;
+          z-index: 1;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          height: 100%;
+        }
+        
+        /* Left Info Side */
         .project-info {
+          padding: 4rem;
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          justify-content: center;
+          gap: 2rem;
+        }
+        .project-header {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
         }
         .project-num {
           font-family: var(--font-mono);
-          font-size: 0.75rem;
-          color: var(--accent);
-          letter-spacing: 0.2em;
+          font-size: 1rem;
+          letter-spacing: 0.1em;
+          font-weight: 600;
         }
         .project-title {
-          font-size: 1.75rem;
+          font-family: var(--font-display);
+          font-size: 3.5rem;
           font-weight: 700;
-          letter-spacing: -0.02em;
+          line-height: 1.1;
+          letter-spacing: -0.03em;
+          color: var(--text-primary);
         }
         .project-desc {
+          font-size: 1.1rem;
           color: var(--text-muted);
-          font-size: 0.95rem;
-          line-height: 1.6;
-        }
-        .project-features {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-        .project-feature {
-          font-size: 0.75rem;
-          color: var(--text-muted);
-          padding: 0.35rem 0.75rem;
-          border: 1px solid var(--border);
-          border-radius: 100px;
-          font-family: var(--font-mono);
+          line-height: 1.7;
+          max-width: 90%;
         }
         .project-tech {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.5rem;
-          margin-top: 0.5rem;
+          gap: 0.75rem;
         }
         .project-tech-tag {
-          font-size: 0.8rem;
-          font-weight: 500;
-          color: var(--accent);
-          padding: 0.4rem 0.9rem;
-          background: rgba(94, 234, 212, 0.08);
+          font-family: var(--font-mono);
+          font-size: 0.75rem;
+          color: var(--text-primary);
+          padding: 0.5rem 1rem;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 100px;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
         }
         .project-links {
           display: flex;
+          align-items: center;
           gap: 1.5rem;
-          margin-top: 0.5rem;
+          margin-top: 1rem;
         }
         .project-link {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          font-size: 0.875rem;
-          font-weight: 500;
+          font-family: var(--font-mono);
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          transition: all 0.3s;
+        }
+        .primary-link {
+          color: var(--bg-primary);
+          background: var(--text-primary);
+          padding: 1rem 1.5rem;
+          border-radius: 100px;
+        }
+        .primary-link:hover {
+          background: var(--hover-color);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .secondary-link {
           color: var(--text-muted);
-          transition: color 0.3s;
         }
-        .project-link:hover {
-          color: var(--accent);
+        .secondary-link:hover {
+          color: var(--text-primary);
         }
+        
+        /* Right Visual Side */
+        .project-visual {
+          border-left: 1px solid rgba(255, 255, 255, 0.05);
+          overflow: hidden;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          background: rgba(0, 0, 0, 0.2);
+        }
+        .browser-mockup {
+          width: 100%;
+          height: 100%;
+          max-height: 400px;
+          background: #000;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .browser-header {
+          height: 32px;
+          background: #111;
+          display: flex;
+          align-items: center;
+          padding: 0 1rem;
+          gap: 6px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .browser-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+        .close { background: #ff5f56; }
+        .min { background: #ffbd2e; }
+        .max { background: #27c93f; }
+        
+        .browser-body {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+        }
+        .mockup-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2rem;
+          width: 80%;
+        }
+        .mockup-logo {
+          font-family: var(--font-display);
+          font-size: 2.5rem;
+          font-weight: 700;
+          letter-spacing: -0.05em;
+        }
+        .mockup-lines {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          align-items: center;
+        }
+        .mockup-line {
+          height: 4px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 4px;
+        }
+        .w-3\\/4 { width: 75%; }
+        .w-1\\/2 { width: 50%; }
+        .w-5\\/6 { width: 83%; }
 
-        @media (max-width: 900px) {
-          .project-card,
-          .project-card--reversed {
-            grid-template-columns: 1fr;
-            direction: ltr;
+        @media (max-width: 1024px) {
+          .project-card-container {
+            height: auto;
+            max-height: none;
+            position: relative;
+            top: 0 !important;
+          }
+          .project-card {
+            transform: none !important;
+          }
+          .projects-stack {
             gap: 2rem;
           }
-        }
-        @media (max-width: 480px) {
-          .project-preview-name {
-            font-size: 1.75rem;
+          .project-content {
+            grid-template-columns: 1fr;
           }
+          .project-visual {
+            border-left: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 300px;
+          }
+          .project-info {
+            padding: 3rem 2rem;
+          }
+        }
+        @media (max-width: 640px) {
           .project-title {
-            font-size: 1.5rem;
+            font-size: 2.5rem;
+          }
+          .project-links {
+            flex-direction: column;
+            align-items: flex-start;
           }
         }
       `}</style>
