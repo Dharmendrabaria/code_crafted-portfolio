@@ -154,31 +154,31 @@ export default function Hero() {
                   <span className="c-op">=</span>{' '}
                   <span className="c-bracket">{'() => {'}</span>
                   <br />
-                  {'  '}<span className="c-keyword">return</span>{' '}
+                  {' '}<span className="c-keyword">return</span>{' '}
                   <span className="c-bracket">{'('}</span>
                   <br />
-                  {'    '}<span className="c-tag">{'<'}</span>
+                  {'  '}<span className="c-tag">{'<'}</span>
                   <span className="c-component">Experience</span>
                   <br />
-                  {'      '}<span className="c-attr">developer</span>
+                  {'    '}<span className="c-attr">developer</span>
                   <span className="c-op">=</span>
                   <span className="c-string">"Dharmendra"</span>
                   <br />
-                  {'      '}<span className="c-attr">stack</span>
+                  {'    '}<span className="c-attr">stack</span>
                   <span className="c-op">=</span>
                   <span className="c-string">"MERN"</span>
                   <br />
-                  {'      '}<span className="c-attr">quality</span>
+                  {'    '}<span className="c-attr">quality</span>
                   <span className="c-op">=</span>
                   <span className="c-string">"premium"</span>
                   <br />
-                  {'      '}<span className="c-attr">passion</span>
+                  {'    '}<span className="c-attr">passion</span>
                   <span className="c-op">=</span>
                   <span className="c-bool">{'{true}'}</span>
                   <br />
-                  {'    '}<span className="c-tag">{'/>'}</span>
+                  {'  '}<span className="c-tag">{'/>'}</span>
                   <br />
-                  {'  '}<span className="c-bracket">{')'}</span>
+                  {' '}<span className="c-bracket">{')'}</span>
                   <br />
                   <span className="c-bracket">{'}'}</span>
                 </code>
@@ -501,6 +501,11 @@ export default function Hero() {
             max-width: 360px;
             margin: 0 auto;
           }
+          .hero-code-body {
+            padding: 1rem;
+            font-size: 0.7rem;
+            line-height: 1.6;
+          }
           .hero-badge-2 {
             left: -10px;
           }
@@ -517,6 +522,11 @@ export default function Hero() {
           .hero-right {
             width: 100%;
             max-width: 100%;
+          }
+          .hero-code-body {
+            padding: 0.8rem;
+            font-size: 0.65rem;
+            line-height: 1.6;
           }
           .hero-actions {
             flex-direction: column;

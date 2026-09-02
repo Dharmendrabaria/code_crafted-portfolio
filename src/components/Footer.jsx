@@ -387,7 +387,7 @@ export default function Footer() {
             justify-content: center;
           }
           .footer-massive-text h1 {
-            font-size: 11vw;
+            font-size: 13vw;
           }
           .footer-bottom-bar {
             justify-content: center;
@@ -405,7 +405,7 @@ export default function Footer() {
             border-radius: 16px;
           }
           .footer-massive-text h1 {
-            font-size: 10vw;
+            font-size: 12.5vw;
           }
           .footer-bottom-bar {
             flex-direction: column;
