@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Sparkles } from 'lucide-react';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -9,13 +9,13 @@ const navLinks = [
   { label: 'Services', href: '#services' },
   { label: 'Packages', href: '#packages' },
   { label: 'Workflow', href: '#workflow' },
-  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [hoveredLink, setHoveredLink] = useState(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -58,38 +58,74 @@ export default function Navbar() {
     <>
       <div className="navbar-wrapper">
         <motion.nav
+          layout
           className={`navbar-island ${scrolled ? 'is-scrolled' : ''}`}
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            layout: { duration: 0.6, type: "spring", stiffness: 200, damping: 25 },
+            y: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+          }}
         >
           <div className="navbar-inner">
-            <a href="#home" className="navbar-brand" onClick={(e) => { e.preventDefault(); scrollTo('#home'); }}>
-              <span className="brand-dot"></span>
-              CODE CRAFTED
+
+            <a href="#home" className="navbar-brand group" onClick={(e) => { e.preventDefault(); scrollTo('#home'); }}>
+              <div className="brand-logo-icon-container">
+                <img src="/pwa-192.png?v=3" alt="CC Icon" className="brand-logo-icon" />
+              </div>
+              <span className="brand-text">CODE CRAFTED</span>
             </a>
 
-            <div className="navbar-links">
-              {navLinks.map(({ label, href }) => (
-                <a
-                  key={href}
-                  href={href}
-                  className={`navbar-link ${activeSection === href.slice(1) ? 'navbar-link--active' : ''}`}
-                  onClick={(e) => { e.preventDefault(); scrollTo(href); }}
-                >
-                  {label}
-                </a>
-              ))}
+            <div className="navbar-links" onMouseLeave={() => setHoveredLink(null)}>
+              {navLinks.map(({ label, href }) => {
+                const isActive = activeSection === href.slice(1);
+                const isHovered = hoveredLink === href;
+
+                return (
+                  <a
+                    key={href}
+                    href={href}
+                    className={`navbar-link ${isActive ? 'is-active' : ''}`}
+                    onClick={(e) => { e.preventDefault(); scrollTo(href); }}
+                    onMouseEnter={() => setHoveredLink(href)}
+                  >
+                    {/* The Magic Sliding Pill */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-pill"
+                        className="active-pill-bg"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+
+                    {/* Hover Glow Pill */}
+                    {isHovered && !isActive && (
+                      <motion.div
+                        layoutId="hover-pill"
+                        className="hover-pill-bg"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    )}
+
+                    <span className="link-text">{label}</span>
+                  </a>
+                );
+              })}
             </div>
 
             <div className="navbar-actions">
               <a
                 href="#contact"
                 className="navbar-cta"
-                data-cursor="OPEN"
                 onClick={(e) => { e.preventDefault(); scrollTo('#contact'); }}
               >
-                Let's Talk <ArrowUpRight size={16} />
+                <div className="cta-glare" />
+                <Sparkles size={14} className="cta-sparkle" />
+                <span className="cta-text">Let's Talk</span>
+                <ArrowUpRight size={16} className="cta-arrow" />
               </a>
 
               <button
@@ -97,46 +133,50 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label="Toggle menu"
               >
-                {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+                <motion.div animate={{ rotate: mobileOpen ? 90 : 0 }} transition={{ duration: 0.3 }}>
+                  {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+                </motion.div>
               </button>
             </div>
           </div>
         </motion.nav>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Premium Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             className="mobile-menu"
-            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            animate={{ opacity: 1, backdropFilter: 'blur(30px)' }}
-            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0, clipPath: 'circle(0% at top right)' }}
+            animate={{ opacity: 1, clipPath: 'circle(150% at top right)' }}
+            exit={{ opacity: 0, clipPath: 'circle(0% at top right)' }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="mobile-menu-content">
               {navLinks.map(({ label, href }, i) => (
-                <motion.a
-                  key={href}
-                  href={href}
-                  className={`mobile-menu-link ${activeSection === href.slice(1) ? 'mobile-menu-link--active' : ''}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={(e) => { e.preventDefault(); scrollTo(href); }}
-                >
-                  <span className="mobile-menu-number">0{i + 1}</span>
-                  {label}
-                </motion.a>
+                <div key={href} className="mobile-link-wrapper">
+                  <motion.a
+                    href={href}
+                    className={`mobile-menu-link ${activeSection === href.slice(1) ? 'mobile-menu-link--active' : ''}`}
+                    initial={{ opacity: 0, y: 50, rotate: 5 }}
+                    animate={{ opacity: 1, y: 0, rotate: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    onClick={(e) => { e.preventDefault(); scrollTo(href); }}
+                  >
+                    <span className="mobile-menu-number">0{i + 1}</span>
+                    {label}
+                  </motion.a>
+                </div>
               ))}
-              
-              <motion.div 
+
+              <motion.div
                 className="mobile-menu-footer"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
               >
-                <a href="mailto:d.baria2411@gmail.com">d.baria2411@gmail.com</a>
+                <p>Ready to start a project?</p>
+                <a href="mailto:d.baria2411@gmail.com" className="mobile-email">d.baria2411@gmail.com</a>
               </motion.div>
             </div>
           </motion.div>
@@ -146,35 +186,33 @@ export default function Navbar() {
       <style>{`
         .navbar-wrapper {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
+          top: 0; left: 0; right: 0;
           z-index: 1000;
           display: flex;
           justify-content: center;
           padding: 1.5rem 2rem;
-          pointer-events: none; /* Let clicks pass through the wrapper */
+          pointer-events: none; 
         }
 
         .navbar-island {
-          pointer-events: auto; /* Re-enable clicks on the island */
+          pointer-events: auto; 
           width: 100%;
           max-width: 1400px;
           background: transparent;
           border: 1px solid transparent;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          /* Removed CSS transition on width/padding to allow Framer Motion layout to handle it smoothly without jitter */
+          transition: background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s;
         }
 
-        /* Scrolled Floating Pill State */
         .navbar-island.is-scrolled {
           width: auto;
-          background: rgba(8, 12, 10, 0.65);
+          background: rgba(8, 12, 10, 0.7);
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 100px;
-          padding: 0.5rem 1rem 0.5rem 2rem;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .navbar-inner {
@@ -182,67 +220,84 @@ export default function Navbar() {
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          gap: 3rem;
+          gap: 2.5rem;
         }
 
-        /* Brand */
+        /* --- BRAND --- */
         .navbar-brand {
           font-family: var(--font-display);
           font-size: 1.1rem;
-          font-weight: 700;
+          font-weight: 800;
           letter-spacing: 0.15em;
           color: var(--text-primary);
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          transition: transform 0.3s;
-        }
-        .navbar-brand:hover {
-          transform: scale(1.02);
+          gap: 0.75rem;
         }
         
-        .brand-dot {
-          width: 8px;
-          height: 8px;
-          background: var(--accent);
-          border-radius: 50%;
-          box-shadow: 0 0 10px var(--accent);
-          animation: pulse 2s infinite;
+        .brand-logo-icon-container {
+          position: relative;
+          width: 32px; height: 32px;
+          display: flex; align-items: center; justify-content: center;
         }
-
-        @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0.4); }
-          70% { box-shadow: 0 0 0 10px rgba(94, 234, 212, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0); }
+        
+        .brand-logo-icon {
+          width: 100%; height: 100%;
+          object-fit: contain;
+          filter: drop-shadow(0 0 10px rgba(94, 234, 212, 0.4)) contrast(1.1);
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
         }
+        
+        .navbar-brand:hover .brand-logo-icon { 
+          transform: scale(1.15) rotate(-5deg); 
+          filter: drop-shadow(0 0 15px rgba(94, 234, 212, 0.8)) contrast(1.2);
+        }
+        
+        .brand-text { transition: color 0.3s; }
+        .navbar-brand:hover .brand-text { color: var(--accent); }
 
-        /* Links */
+        /* --- MAGIC PILL LINKS --- */
         .navbar-links {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.25rem;
+          position: relative;
         }
 
         .navbar-link {
-          font-size: 0.85rem;
-          font-weight: 500;
-          color: var(--text-muted);
-          padding: 0.6rem 1.2rem;
-          border-radius: 100px;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           position: relative;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--text-muted);
+          padding: 0.6rem 1.25rem;
+          border-radius: 100px;
+          transition: color 0.3s ease;
+          z-index: 1;
         }
         
-        .navbar-link:hover {
-          color: var(--text-primary);
+        .navbar-link:hover { color: #fff; }
+        .navbar-link.is-active { color: #000; }
+
+        .link-text { position: relative; z-index: 10; }
+
+        .active-pill-bg {
+          position: absolute;
+          inset: 0;
+          background: #fff;
+          border-radius: 100px;
+          z-index: 0;
+          box-shadow: 0 4px 15px rgba(255,255,255,0.2);
         }
 
-        .navbar-link--active {
-          color: var(--bg-primary);
-          background: var(--text-primary);
+        .hover-pill-bg {
+          position: absolute;
+          inset: 0;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 100px;
+          z-index: 0;
         }
-        
-        /* CTA & Actions */
+
+        /* --- ADVANCED CTA BUTTON --- */
         .navbar-actions {
           display: flex;
           align-items: center;
@@ -250,78 +305,110 @@ export default function Navbar() {
         }
 
         .navbar-cta {
+          position: relative;
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 0.75rem 1.5rem;
+          padding: 0.75rem 1.75rem;
           background: var(--accent);
-          color: var(--bg-primary);
+          color: #000;
           border-radius: 100px;
           font-size: 0.85rem;
-          font-weight: 600;
+          font-weight: 700;
+          overflow: hidden;
           transition: all 0.3s;
         }
         
         .navbar-cta:hover {
-          background: #4de3cd;
           transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(94, 234, 212, 0.2);
+          box-shadow: 0 10px 20px rgba(94, 234, 212, 0.3);
         }
 
+        .cta-glare {
+          position: absolute;
+          top: 0; left: -100%;
+          width: 50%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+          transform: skewX(-20deg);
+          transition: 0s;
+        }
+        
+        .navbar-cta:hover .cta-glare {
+          left: 200%;
+          transition: 0.6s ease-in-out;
+        }
+
+        .cta-sparkle { color: #000; transition: transform 0.3s; }
+        .navbar-cta:hover .cta-sparkle { transform: rotate(45deg) scale(1.2); }
+
+        .cta-arrow { transition: transform 0.3s; }
+        .navbar-cta:hover .cta-arrow { transform: translate(3px, -3px); }
+
+        /* --- MOBILE TOGGLE --- */
         .navbar-mobile-toggle {
           display: none;
-          color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          width: 44px;
-          height: 44px;
+          color: var(--accent);
+          background: rgba(94, 234, 212, 0.05);
+          border: 1px solid rgba(94, 234, 212, 0.2);
+          width: 48px; height: 48px;
           border-radius: 50%;
           align-items: center;
           justify-content: center;
           transition: all 0.3s;
         }
+        .navbar-mobile-toggle:hover {
+          background: var(--accent);
+          color: #000;
+        }
 
-        /* Mobile Menu */
+        /* --- PREMIUM MOBILE MENU --- */
         .mobile-menu {
           position: fixed;
           inset: 0;
           z-index: 999;
-          background: rgba(5, 8, 7, 0.95);
+          background: rgba(8, 17, 15, 0.98);
+          backdrop-filter: blur(30px);
           display: flex;
           align-items: center;
-          justify-content: center;
-        }
-        .mobile-menu-content {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          width: 100%;
-          max-width: 400px;
           padding: 2rem;
         }
         
+        .mobile-menu-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          width: 100%;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        
+        .mobile-link-wrapper { overflow: hidden; }
+
         .mobile-menu-link {
           font-family: var(--font-display);
-          font-size: 2.5rem;
-          font-weight: 700;
+          font-size: clamp(2.5rem, 8vw, 4rem);
+          font-weight: 800;
           color: var(--text-muted);
           display: flex;
           align-items: center;
           gap: 1.5rem;
           transition: color 0.3s, transform 0.3s;
+          text-transform: uppercase;
+          line-height: 1.1;
         }
         
         .mobile-menu-link:hover,
         .mobile-menu-link--active {
           color: var(--accent);
-          transform: translateX(10px);
+          transform: translateX(15px);
         }
         
         .mobile-menu-number {
           font-family: var(--font-mono);
-          font-size: 0.9rem;
+          font-size: 1.2rem;
           color: var(--text-dim);
-          font-weight: 400;
+          font-weight: 500;
+          opacity: 0.5;
         }
 
         .mobile-menu-footer {
@@ -329,33 +416,29 @@ export default function Navbar() {
           padding-top: 2rem;
           border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .mobile-menu-footer a {
+        
+        .mobile-menu-footer p {
           color: var(--text-dim);
-          font-family: var(--font-mono);
           font-size: 0.9rem;
-          transition: color 0.3s;
-        }
-        .mobile-menu-footer a:hover {
-          color: var(--accent);
+          margin-bottom: 0.5rem;
         }
 
+        .mobile-email {
+          color: #fff;
+          font-family: var(--font-display);
+          font-size: 1.5rem;
+          font-weight: 700;
+          transition: color 0.3s;
+        }
+        .mobile-email:hover { color: var(--accent); }
+
         @media (max-width: 1024px) {
-          .navbar-links {
-            display: none;
-          }
-          .navbar-cta {
-            display: none;
-          }
-          .navbar-mobile-toggle {
-            display: flex;
-          }
-          .navbar-wrapper {
-            padding: 1rem;
-          }
+          .navbar-links, .navbar-cta { display: none; }
+          .navbar-mobile-toggle { display: flex; }
+          .navbar-wrapper { padding: 1rem; }
           .navbar-island.is-scrolled {
             padding: 0.5rem 0.5rem 0.5rem 1.5rem;
-            width: 100%;
-            max-width: 100%;
+            width: 100%; max-width: 100%;
           }
         }
       `}</style>

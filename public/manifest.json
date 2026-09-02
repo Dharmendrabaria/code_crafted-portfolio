@@ -1,18 +1,23 @@
 {
-  "name": "Code Crafted — Full Stack MERN Developer",
   "short_name": "Code Crafted",
-  "description": "Code Crafted builds modern, scalable and high-performance web experiences using React, Node.js and MongoDB.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#081110",
-  "theme_color": "#081110",
-  "orientation": "portrait-primary",
+  "name": "Code Crafted - Premium Developer Portfolio",
+  "description": "High-end Full Stack MERN Developer Portfolio.",
   "icons": [
     {
-      "src": "/logo.png",
-      "sizes": "512x512",
+      "src": "/pwa-192.png",
       "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#08100e",
+  "background_color": "#050a09"
 }

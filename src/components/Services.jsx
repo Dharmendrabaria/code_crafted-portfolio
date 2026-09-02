@@ -1,57 +1,66 @@
- import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Globe, Layers, Database, LayoutDashboard, Server, Wrench } from 'lucide-react';
 
 const services = [
   {
     num: '01',
     title: 'Web Development',
-    desc: 'Bespoke, high-performance websites engineered for scale and tailored to elevate your brand.',
-    icon: <Globe size={28} />,
+    desc: 'Bespoke, high-performance websites engineered for scale and tailored to elevate your brand identity. I build digital experiences that load instantly and perform flawlessly.',
+    icon: <Globe size={48} strokeWidth={1.5} />,
+    color: '#14B8A6'
   },
   {
     num: '02',
     title: 'React Architecture',
-    desc: 'Fluid, interactive frontend applications built with advanced React patterns and component-driven design.',
-    icon: <Layers size={28} />,
+    desc: 'Fluid, interactive frontend applications built with advanced React patterns, Framer Motion animations, and scalable component-driven design systems.',
+    icon: <Layers size={48} strokeWidth={1.5} />,
+    color: '#38bdf8'
   },
   {
     num: '03',
     title: 'Full MERN Stack',
-    desc: 'End-to-end ecosystems utilizing MongoDB, Express, React, and Node.js for seamless data flow.',
-    icon: <Database size={28} />,
+    desc: 'End-to-end ecosystems utilizing MongoDB, Express, React, and Node.js. Seamless data flow from the database to the DOM with zero bottlenecks.',
+    icon: <Database size={48} strokeWidth={1.5} />,
+    color: '#4db33d'
   },
   {
     num: '04',
     title: 'Admin Dashboards',
-    desc: 'Complex data visualization and powerful management tools packed into intuitive, clean interfaces.',
-    icon: <LayoutDashboard size={28} />,
+    desc: 'Complex data visualization and powerful management tools packed into intuitive, clean interfaces. Real-time analytics and role-based access control.',
+    icon: <LayoutDashboard size={48} strokeWidth={1.5} />,
+    color: '#f59e0b'
   },
   {
     num: '05',
     title: 'REST APIs',
-    desc: 'Secure, lightning-fast backend architectures and APIs built to support enterprise-grade applications.',
-    icon: <Server size={28} />,
+    desc: 'Secure, lightning-fast backend architectures and APIs built to support enterprise-grade applications with microservices scaling in mind.',
+    icon: <Server size={48} strokeWidth={1.5} />,
+    color: '#8b5cf6'
   },
   {
     num: '06',
     title: 'System Support',
-    desc: 'Continuous technical refinement, performance monitoring, and structural updates for your platforms.',
-    icon: <Wrench size={28} />,
+    desc: 'Continuous technical refinement, performance monitoring, legacy code refactoring, and structural updates to keep your platform bleeding-edge.',
+    icon: <Wrench size={48} strokeWidth={1.5} />,
+    color: '#ec4899'
   },
 ];
 
 export default function Services() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
-  const [active, setActive] = useState(0); // First one active by default on desktop
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const activeService = services[activeIndex];
 
   return (
     <section id="services" className="section services-section" ref={ref}>
       <div className="container">
+        
         <motion.div
           className="services-header"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
@@ -59,45 +68,76 @@ export default function Services() {
           <h2 className="section-title">WHAT <span className="gradient-text">I DO</span></h2>
         </motion.div>
 
-        <motion.div 
-          className="services-pillars"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {services.map((service, i) => {
-            const isActive = active === i;
-            return (
-              <div
-                key={service.num}
-                className={`pillar ${isActive ? 'active' : ''}`}
-                onMouseEnter={() => setActive(i)}
-              >
-                <div className="pillar-bg" />
-                <div className="pillar-content">
-                  <div className="pillar-top">
-                    <div className="pillar-icon-wrapper">
-                      {service.icon}
-                    </div>
-                    <span className="pillar-num">{service.num}</span>
-                  </div>
-
-                  <div className="pillar-info">
-                    <h3 className="pillar-title">{service.title}</h3>
-                    <div className="pillar-desc-wrapper">
-                      <p className="pillar-desc">{service.desc}</p>
-                    </div>
-                  </div>
-
-                  {/* Vertical title for non-active state */}
-                  <div className="pillar-vertical-title">
-                    {service.title}
-                  </div>
+        <div className="services-split-layout">
+          {/* Left Side: List of Services */}
+          <div className="services-list-container">
+            {services.map((service, index) => {
+              const isActive = activeIndex === index;
+              return (
+                <div 
+                  key={service.num} 
+                  className={`service-list-item ${isActive ? 'is-active' : ''}`}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  <div className="service-list-num">{service.num}</div>
+                  <h3 className="service-list-title">{service.title}</h3>
+                  <motion.div 
+                    className="service-list-line" 
+                    initial={false}
+                    animate={{ 
+                      width: isActive ? '100%' : '0%',
+                      backgroundColor: isActive ? service.color : 'rgba(255,255,255,0.1)'
+                    }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  />
                 </div>
-              </div>
-            );
-          })}
-        </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Right Side: Sticky Spotlight Window */}
+          <div className="services-spotlight-container">
+            <div className="spotlight-sticky-wrapper">
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={activeIndex}
+                  className="spotlight-card"
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {/* Dynamic Glowing Background */}
+                  <div 
+                    className="spotlight-glow" 
+                    style={{ background: `radial-gradient(circle at top right, ${activeService.color}40 0%, transparent 60%)` }} 
+                  />
+                  
+                  <div className="spotlight-content">
+                    <div className="spotlight-icon-wrapper" style={{ color: activeService.color }}>
+                      <div className="spotlight-icon-bg" style={{ backgroundColor: `${activeService.color}15` }} />
+                      {activeService.icon}
+                    </div>
+                    
+                    <div className="spotlight-text-group">
+                      <h3 className="spotlight-title">{activeService.title}</h3>
+                      <p className="spotlight-desc">{activeService.desc}</p>
+                    </div>
+
+                    <div className="spotlight-footer">
+                      <span className="spotlight-num" style={{ color: activeService.color }}>
+                        {activeService.num}
+                      </span>
+                      <span className="spotlight-label">Service Focus</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <style>{`
@@ -105,7 +145,9 @@ export default function Services() {
           position: relative;
           z-index: 2;
           padding-top: 6rem;
+          padding-bottom: 6rem;
         }
+
         .services-header {
           text-align: center;
           margin-bottom: 5rem;
@@ -114,185 +156,229 @@ export default function Services() {
           align-items: center;
         }
 
-        /* Pillars Container */
-        .services-pillars {
-          display: flex;
-          gap: 1rem;
-          height: 500px;
+        .services-split-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
           max-width: 1200px;
           margin: 0 auto;
-          border-radius: 24px;
-          overflow: hidden;
-        }
-
-        /* Individual Pillar */
-        .pillar {
           position: relative;
-          flex: 1;
-          height: 100%;
-          background: rgba(17, 32, 29, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
-          overflow: hidden;
+        }
+
+        /* Left Side */
+        .services-list-container {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          padding-top: 2rem;
+          padding-bottom: 2rem;
+        }
+
+        .service-list-item {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 1.5rem 0;
+          position: relative;
           cursor: pointer;
-          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+          transition: opacity 0.3s;
+          opacity: 0.4;
         }
 
-        /* Active State */
-        .pillar.active {
-          flex: 4;
-          background: rgba(17, 32, 29, 0.8);
-          border-color: rgba(94, 234, 212, 0.3);
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        .service-list-item:hover {
+          opacity: 0.7;
         }
 
-        /* Ambient Glow inside pillar */
-        .pillar-bg {
+        .service-list-item.is-active {
+          opacity: 1;
+        }
+
+        .service-list-num {
+          font-family: var(--font-mono);
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--text-muted);
+        }
+
+        .service-list-item.is-active .service-list-num {
+          color: var(--text-primary);
+        }
+
+        .service-list-title {
+          font-family: var(--font-display);
+          font-size: 2.2rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          transition: transform 0.4s ease;
+        }
+
+        .service-list-item.is-active .service-list-title {
+          transform: translateX(10px);
+        }
+
+        .service-list-line {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Right Side Spotlight */
+        .services-spotlight-container {
+          position: relative;
+        }
+
+        .spotlight-sticky-wrapper {
+          position: sticky;
+          top: 20vh; /* Sticks nicely in the middle of the screen */
+          height: 500px;
+          display: flex;
+          align-items: center;
+        }
+
+        .spotlight-card {
+          width: 100%;
+          height: 100%;
+          background: rgba(17, 32, 29, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 32px;
+          overflow: hidden;
+          position: relative;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+          display: flex;
+          flex-direction: column;
+        }
+
+        .spotlight-glow {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at center, rgba(20, 184, 166, 0.15) 0%, transparent 70%);
-          opacity: 0;
-          transition: opacity 0.6s ease;
+          z-index: 0;
           pointer-events: none;
         }
-        .pillar.active .pillar-bg {
-          opacity: 1;
-        }
 
-        .pillar-content {
+        .spotlight-content {
           position: relative;
           z-index: 1;
+          display: flex;
+          flex-direction: column;
           height: 100%;
-          padding: 2rem;
+          padding: 3.5rem;
+        }
+
+        .spotlight-icon-wrapper {
+          position: relative;
+          width: 80px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 2.5rem;
+        }
+
+        .spotlight-icon-bg {
+          position: absolute;
+          inset: 0;
+          border-radius: 20px;
+          transform: rotate(-10deg);
+          z-index: -1;
+        }
+
+        .spotlight-text-group {
+          flex: 1;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          gap: 1.5rem;
         }
 
-        /* Top section (Icon & Number) */
-        .pillar-top {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          opacity: 0.5;
-          transition: opacity 0.3s;
-        }
-        .pillar.active .pillar-top {
-          opacity: 1;
-        }
-        .pillar-icon-wrapper {
-          color: var(--text-primary);
-          transition: color 0.4s;
-        }
-        .pillar.active .pillar-icon-wrapper {
-          color: var(--accent);
-        }
-        .pillar-num {
-          font-family: var(--font-mono);
-          font-size: 0.8rem;
-          letter-spacing: 0.1em;
-          font-weight: 600;
-        }
-
-        /* Main Info */
-        .pillar-info {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          pointer-events: none;
-        }
-        .pillar.active .pillar-info {
-          opacity: 1;
-          transform: translateY(0);
-          pointer-events: auto;
-          transition-delay: 0.1s;
-        }
-
-        .pillar-title {
+        .spotlight-title {
           font-family: var(--font-display);
-          font-size: 2.5rem;
+          font-size: 2.25rem;
           font-weight: 700;
           color: var(--text-primary);
           line-height: 1.1;
-          white-space: nowrap;
-        }
-        .pillar-desc-wrapper {
-          overflow: hidden;
-        }
-        .pillar-desc {
-          font-size: 1.1rem;
-          color: var(--text-muted);
-          line-height: 1.6;
-          max-width: 400px;
         }
 
-        /* Vertical Title (when collapsed) */
-        .pillar-vertical-title {
-          position: absolute;
-          bottom: 2rem;
-          left: 50%;
-          transform: translateX(-50%) rotate(-90deg);
-          transform-origin: left bottom;
-          font-family: var(--font-display);
-          font-size: 1.25rem;
-          font-weight: 600;
-          color: var(--text-primary);
-          white-space: nowrap;
-          opacity: 1;
-          transition: opacity 0.3s;
-          letter-spacing: 0.05em;
+        .spotlight-desc {
+          font-size: 1.15rem;
+          color: var(--text-muted);
+          line-height: 1.7;
         }
-        .pillar.active .pillar-vertical-title {
-          opacity: 0;
-          pointer-events: none;
+
+        .spotlight-footer {
+          display: flex;
+          align-items: baseline;
+          gap: 1rem;
+          margin-top: auto;
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .spotlight-num {
+          font-family: var(--font-display);
+          font-size: 4rem;
+          font-weight: 800;
+          line-height: 0.8;
+          opacity: 0.2;
+        }
+
+        .spotlight-label {
+          font-family: var(--font-mono);
+          font-size: 0.85rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--text-dim);
         }
 
         @media (max-width: 1024px) {
-          .services-pillars {
-            flex-direction: column;
+          .services-split-layout {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .spotlight-sticky-wrapper {
+            position: relative;
+            top: 0;
             height: auto;
-            min-height: 600px;
+            min-height: 400px;
           }
-          .pillar {
-            flex: 1 !important;
-            height: 80px;
-            min-height: 80px;
+          .services-list-container {
+            display: none; /* Hide the list on mobile, or redesign */
           }
-          .pillar.active {
-            flex: none !important;
-            height: 250px;
-            min-height: 250px;
-          }
-          .pillar-content {
-            padding: 1.5rem;
-          }
-          .pillar-vertical-title {
-            bottom: auto;
-            left: 5rem;
-            top: 50%;
-            transform: translateY(-50%);
-          }
-          .pillar-title {
-            font-size: 2rem;
-          }
+          /* Wait, if we hide the list on mobile, how do they navigate? 
+             Instead of hiding, let's keep the list but put the spotlight at the top! */
         }
-        
-        @media (max-width: 640px) {
-          .pillar-title {
-            font-size: 1.5rem;
-            white-space: normal;
+
+        /* Mobile specific fixes */
+        @media (max-width: 1024px) {
+          .services-list-container {
+            display: flex; 
+            order: 2; /* List below the spotlight */
+            padding-top: 0;
           }
-          .pillar-vertical-title {
+          .services-spotlight-container {
+            order: 1; /* Spotlight above the list */
+          }
+          .spotlight-sticky-wrapper {
+            position: sticky;
+            top: 100px; /* Sticks to top on mobile so you can see it change while scrolling the list */
+            z-index: 10;
+          }
+          .spotlight-card {
+            min-height: 350px;
+          }
+          .spotlight-content {
+            padding: 2.5rem;
+          }
+          .spotlight-title {
+            font-size: 1.8rem;
+          }
+          .spotlight-desc {
             font-size: 1rem;
           }
-          .pillar.active {
-            height: 300px;
-            min-height: 300px;
+          .service-list-title {
+            font-size: 1.5rem;
           }
         }
       `}</style>

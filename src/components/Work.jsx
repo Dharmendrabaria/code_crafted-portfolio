@@ -35,42 +35,42 @@ const projects = [
 
 function ProjectCard({ project, index, targetScale }) {
   const cardRef = useRef(null);
-  
+
   // Parallax effect for the inner content
   const { scrollYProgress } = useScroll({
     target: cardRef,
     offset: ['start end', 'start start']
   });
-  
+
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.2, 1]);
 
   return (
     <div className="project-card-container">
-      <motion.div 
-        className="project-card" 
+      <motion.div
+        className="project-card"
         ref={cardRef}
-        style={{ 
+        style={{
           scale: targetScale,
-          top: `calc(10vh + ${index * 30}px)` 
+          top: `calc(10vh + ${index * 30}px)`
         }}
       >
         <div className="project-card-glow" style={{ background: `radial-gradient(circle at 80% 0%, ${project.color}20 0%, transparent 60%)` }} />
-        
+
         <div className="project-content">
           <div className="project-info">
             <div className="project-header">
               <span className="project-num" style={{ color: project.color }}>{project.num}</span>
               <h3 className="project-title">{project.title}</h3>
             </div>
-            
+
             <p className="project-desc">{project.desc}</p>
-            
+
             <div className="project-tech">
               {project.tech.map((t, i) => (
                 <span key={i} className="project-tech-tag">{t}</span>
               ))}
             </div>
-            
+
             <div className="project-links">
               <a href={project.live} className="project-link primary-link" target="_blank" rel="noopener noreferrer" style={{ '--hover-color': project.color }}>
                 <span>Live Demo</span> <ArrowUpRight size={18} />
@@ -80,7 +80,7 @@ function ProjectCard({ project, index, targetScale }) {
               </a>
             </div>
           </div>
-          
+
           <div className="project-visual">
             <motion.div className="browser-mockup" style={{ scale: imageScale }}>
               <div className="browser-header">
@@ -109,7 +109,7 @@ function ProjectCard({ project, index, targetScale }) {
 export default function Work() {
   const containerRef = useRef(null);
   const inView = useInView(containerRef, { once: true, margin: '-100px' });
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end']
@@ -136,13 +136,13 @@ export default function Work() {
               [i * (1 / projects.length), 1],
               [1, 1 - (projects.length - i) * 0.02]
             );
-            
+
             return (
-              <ProjectCard 
-                key={project.num} 
-                project={project} 
-                index={i} 
-                targetScale={targetScale} 
+              <ProjectCard
+                key={project.num}
+                project={project}
+                index={i}
+                targetScale={targetScale}
               />
             );
           })}

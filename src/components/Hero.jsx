@@ -229,12 +229,13 @@ export default function Hero() {
 
       <style>{`
         .hero {
-          min-height: 100vh;
+          height: 100vh;
+          min-height: 600px;
           display: flex;
           align-items: center;
           position: relative;
           overflow: hidden;
-          padding-top: 5rem;
+          padding-top: 4rem;
         }
         .hero-bg {
           position: absolute;
@@ -261,15 +262,15 @@ export default function Hero() {
           z-index: 1;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 4rem;
+          gap: 2rem;
           align-items: center;
-          padding-top: 2rem;
-          padding-bottom: 2rem;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
         }
         .hero-left {
           display: flex;
           flex-direction: column;
-          gap: 1.75rem;
+          gap: 1.25rem;
         }
         .hero-label {
           display: inline-flex;
@@ -314,10 +315,10 @@ export default function Hero() {
           background-clip: text;
         }
         .hero-desc {
-          font-size: 1.125rem;
+          font-size: 1.1rem;
           color: var(--text-muted);
           max-width: 480px;
-          line-height: 1.7;
+          line-height: 1.6;
         }
         .hero-actions {
           display: flex;
@@ -327,9 +328,9 @@ export default function Hero() {
         .hero-stats {
           display: flex;
           align-items: center;
-          gap: 2.5rem;
-          margin-top: 1rem;
-          padding-top: 1.5rem;
+          gap: 2rem;
+          margin-top: 0.5rem;
+          padding-top: 1rem;
           border-top: 1px solid var(--border);
         }
         .hero-stat {
@@ -441,7 +442,7 @@ export default function Hero() {
         }
         .hero-scroll {
           position: absolute;
-          bottom: 2rem;
+          bottom: 1.5rem;
           left: 50%;
           transform: translateX(-50%);
           display: flex;

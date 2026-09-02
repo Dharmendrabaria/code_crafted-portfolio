@@ -21,7 +21,7 @@ export default function About() {
 
         <div className="bento-grid">
           {/* Card 1: Main Intro (Spans 2 columns on desktop) */}
-          <motion.div 
+          <motion.div
             className="bento-card bento-intro"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -39,7 +39,7 @@ export default function About() {
           </motion.div>
 
           {/* Card 2: Stats / Projects */}
-          <motion.div 
+          <motion.div
             className="bento-card bento-stat"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -48,12 +48,12 @@ export default function About() {
           >
             <div className="bento-glow" style={{ background: 'radial-gradient(circle at 100% 100%, rgba(20, 184, 166, 0.15) 0%, transparent 70%)' }} />
             <div className="stat-number">20+</div>
-            <div className="stat-label">Projects<br/>Completed</div>
+            <div className="stat-label">Projects<br />Completed</div>
             <ArrowUpRight className="bento-top-icon" size={20} />
           </motion.div>
 
           {/* Card 3: Location / Availability */}
-          <motion.div 
+          <motion.div
             className="bento-card bento-location"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -71,7 +71,7 @@ export default function About() {
           </motion.div>
 
           {/* Card 4: Philosophy / Clean Code (Spans 2 columns) */}
-          <motion.div 
+          <motion.div
             className="bento-card bento-philosophy"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
