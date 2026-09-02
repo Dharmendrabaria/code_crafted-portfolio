@@ -63,6 +63,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
@@ -71,8 +73,15 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   overflow-x: hidden;
+  max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 a {
@@ -169,7 +178,7 @@ h6 {
 .section {
   padding: var(--section-padding) 0;
   position: relative;
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 8rem;
 }
 
 /* Premium Global Section Divider */

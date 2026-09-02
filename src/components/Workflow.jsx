@@ -166,85 +166,86 @@ export default function Workflow() {
 
           {/* Right Side: Interactive Orbital Dial */}
           <div className="orbital-dial-wrapper">
+            <div className="dial-scaler">
+              {/* SVG Circuit Board Layer */}
+              <motion.svg
+                className="circuit-board-layer"
+                width="500"
+                height="500"
+                viewBox="0 0 500 500"
+                animate={{ rotate: rotation }}
+                transition={{ type: "spring", stiffness: 50, damping: 14 }}
+              >
+                <defs>
+                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="4" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                {generateCircuitLines()}
+              </motion.svg>
 
-            {/* SVG Circuit Board Layer */}
-            <motion.svg
-              className="circuit-board-layer"
-              width="500"
-              height="500"
-              viewBox="0 0 500 500"
-              animate={{ rotate: rotation }}
-              transition={{ type: "spring", stiffness: 50, damping: 14 }}
-            >
-              <defs>
-                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="4" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              {generateCircuitLines()}
-            </motion.svg>
+              {/* The spinning rings */}
+              <div className="dial-ring ring-outer"></div>
+              <div className="dial-ring ring-middle"></div>
+              <div className="dial-ring ring-inner"></div>
 
-            {/* The spinning rings */}
-            <div className="dial-ring ring-outer"></div>
-            <div className="dial-ring ring-middle"></div>
-            <div className="dial-ring ring-inner"></div>
+              {/* The Dial Container that rotates */}
+              <motion.div
+                className="dial-container"
+                animate={{ rotate: rotation }}
+                transition={{ type: "spring", stiffness: 50, damping: 14 }}
+              >
+                {steps.map((step, index) => {
+                  const angle = (index * 60) - 90;
+                  const radian = angle * (Math.PI / 180);
+                  const x = Math.cos(radian) * radius;
+                  const y = Math.sin(radian) * radius;
+                  const isActive = index === activeStep;
 
-            {/* The Dial Container that rotates */}
-            <motion.div
-              className="dial-container"
-              animate={{ rotate: rotation }}
-              transition={{ type: "spring", stiffness: 50, damping: 14 }}
-            >
-              {steps.map((step, index) => {
-                const angle = (index * 60) - 90;
-                const radian = angle * (Math.PI / 180);
-                const x = Math.cos(radian) * radius;
-                const y = Math.sin(radian) * radius;
-                const isActive = index === activeStep;
-
-                return (
-                  <motion.button
-                    key={step.num}
-                    className={`dial-node ${isActive ? 'is-active' : ''}`}
-                    style={{
-                      left: `calc(50% + ${x}px - 32px)`,
-                      top: `calc(50% + ${y}px - 32px)`,
-                    }}
-                    onClick={() => handleNodeClick(index)}
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <motion.div
-                      className="node-icon-wrapper"
-                      animate={{ rotate: -rotation }}
-                      transition={{ type: "spring", stiffness: 50, damping: 14 }}
+                  return (
+                    <motion.button
+                      key={step.num}
+                      className={`dial-node ${isActive ? 'is-active' : ''}`}
+                      style={{
+                        left: `calc(50% + ${x}px - 32px)`,
+                        top: `calc(50% + ${y}px - 32px)`,
+                      }}
+                      onClick={() => handleNodeClick(index)}
+                      whileHover={{ scale: 1.15 }}
+                      whileTap={{ scale: 0.9 }}
                     >
-                      {step.icon}
-                    </motion.div>
+                      <motion.div
+                        className="node-icon-wrapper"
+                        animate={{ rotate: -rotation }}
+                        transition={{ type: "spring", stiffness: 50, damping: 14 }}
+                      >
+                        {step.icon}
+                      </motion.div>
 
-                    <motion.div
-                      className="node-number"
-                      animate={{ rotate: -rotation }}
-                      transition={{ type: "spring", stiffness: 50, damping: 14 }}
-                    >
-                      {step.num}
-                    </motion.div>
-                  </motion.button>
-                );
-              })}
-            </motion.div>
+                      <motion.div
+                        className="node-number"
+                        animate={{ rotate: -rotation }}
+                        transition={{ type: "spring", stiffness: 50, damping: 14 }}
+                      >
+                        {step.num}
+                      </motion.div>
+                    </motion.button>
+                  );
+                })}
+              </motion.div>
 
-            {/* Center Core element */}
-            <div className="dial-center-core">
-              <div className="core-inner" />
-              <div className="core-glow-pulse" />
+              {/* Center Core element */}
+              <div className="dial-center-core">
+                <div className="core-inner" />
+                <div className="core-glow-pulse" />
 
-              <div className="core-binary-overlay">
-                0110<br />1001
+                <div className="core-binary-overlay">
+                  0110<br />1001
+                </div>
               </div>
             </div>
           </div>
@@ -502,13 +503,23 @@ export default function Workflow() {
         /* --- Right Side: Orbital Dial --- */
         .orbital-dial-wrapper {
           flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          width: 100%;
+          min-height: 500px;
+          position: relative;
+        }
+
+        .dial-scaler {
           position: relative;
           width: 500px;
           height: 500px;
           display: flex;
           align-items: center;
           justify-content: center;
-          flex-shrink: 0;
+          transform-origin: center center;
         }
 
         /* NEW SVG Circuit Layer */
@@ -679,18 +690,20 @@ export default function Workflow() {
             max-width: 600px;
           }
           .orbital-dial-wrapper {
+            min-height: 400px;
+          }
+          .dial-scaler {
             transform: scale(0.8);
-            margin-top: -1rem;
-            margin-bottom: -3rem;
           }
         }
 
         /* ===== MOBILE ===== */
         @media (max-width: 700px) {
           .orbital-dial-wrapper {
+            min-height: 325px;
+          }
+          .dial-scaler {
             transform: scale(0.65);
-            margin-top: -1.5rem;
-            margin-bottom: -5rem;
           }
           .card-glass-panel {
             padding: 2rem 1.5rem;
@@ -700,9 +713,10 @@ export default function Workflow() {
         /* ===== SMALL MOBILE ===== */
         @media (max-width: 480px) {
           .orbital-dial-wrapper {
+            min-height: 275px;
+          }
+          .dial-scaler {
             transform: scale(0.55);
-            margin-top: -2.5rem;
-            margin-bottom: -7rem;
           }
         }
       `}</style>

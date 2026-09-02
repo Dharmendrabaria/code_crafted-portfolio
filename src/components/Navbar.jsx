@@ -408,12 +408,12 @@ export default function Navbar() {
 
         .mobile-menu-link {
           font-family: var(--font-display);
-          font-size: clamp(2.5rem, 8vw, 4rem);
+          font-size: clamp(1.5rem, 7vw, 4rem);
           font-weight: 800;
-          color: var(--text-muted);
+          color: #ffffff;
           display: flex;
           align-items: center;
-          gap: 1.5rem;
+          gap: 1rem;
           transition: color 0.3s, transform 0.3s;
           text-transform: uppercase;
           line-height: 1.1;
@@ -465,15 +465,13 @@ export default function Navbar() {
         }
 
         @media (max-width: 480px) {
-          .navbar-wrapper { padding: 0.75rem; }
+          .navbar-wrapper { padding: 0.5rem; }
+          .mobile-menu { padding: 1rem; padding-top: 5rem; }
           .brand-text { display: none; }
           .navbar-brand { gap: 0.5rem; }
           .brand-logo-icon-container { width: 36px; height: 36px; }
           .navbar-island.is-scrolled {
             padding: 0.4rem 0.4rem 0.4rem 1rem;
-          }
-          .mobile-menu-link {
-            font-size: clamp(1.75rem, 8vw, 2.5rem);
           }
         }
 

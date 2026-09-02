@@ -334,17 +334,21 @@ export default function TechStack() {
           }
         }
 
-        @media (max-width: 380px) {
+        @media (max-width: 480px) {
           .tech-tabs {
-            flex-direction: column;
-            width: 100%;
             border-radius: 20px;
+            padding: 0.5rem;
+            width: 100%;
+            justify-content: center;
           }
           .tech-tab {
-            width: 100%;
+            flex: 1 1 auto;
+            text-align: center;
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
           }
           .tab-active-bg {
-            border-radius: 12px;
+            border-radius: 100px;
           }
         }
       `}</style>
