@@ -125,7 +125,7 @@ export default function Footer() {
         .footer-premium {
           position: relative;
           background: #050807;
-          padding-top: 2rem; 
+          padding-top: 0; 
           padding-bottom: 2rem;
           border-top: 1px solid rgba(255, 255, 255, 0.05);
           overflow: visible;
@@ -142,9 +142,13 @@ export default function Footer() {
           background: linear-gradient(135deg, rgba(94, 234, 212, 0.04) 0%, rgba(5, 8, 7, 0.8) 60%);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          position: relative;
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: calc(100% - 2rem);
+          max-width: 1200px;
           z-index: 10;
-          margin-bottom: clamp(3rem, 5vw, 5rem);
           gap: 1.5rem;
         }
         
@@ -180,6 +184,7 @@ export default function Footer() {
           display: grid;
           grid-template-columns: 1.5fr 1fr 1fr;
           gap: clamp(2rem, 4vw, 4rem);
+          padding-top: clamp(6rem, 8vw, 8rem);
           padding-bottom: clamp(2rem, 4vw, 4rem);
           position: relative;
           z-index: 2;
