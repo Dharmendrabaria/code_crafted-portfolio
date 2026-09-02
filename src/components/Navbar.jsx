@@ -12,43 +12,25 @@ const navLinks = [
 ];
 
 const CreativeHamburger = ({ isOpen }) => (
-  <motion.svg
-    width="26"
-    height="26"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    style={{ overflow: 'visible' }}
+  <motion.div
+    style={{ width: 24, height: 24, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
   >
-    {/* Top Line - Morphs to top-left to bottom-right of X */}
-    <motion.path
-      animate={{
-        d: isOpen ? "M 5 5 L 19 19" : "M 3 6 L 21 6",
-        stroke: isOpen ? "#5EEAD4" : "currentColor"
-      }}
-      transition={{ duration: 0.35, ease: "easeInOut" }}
+    <motion.span
+      style={{ position: 'absolute', width: '22px', height: '2px', background: isOpen ? '#5EEAD4' : 'currentColor', borderRadius: '2px' }}
+      animate={isOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -7 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
     />
-    
-    {/* Middle Line - Shrinks to center and fades out */}
-    <motion.path
-      animate={{
-        d: isOpen ? "M 12 12 L 12 12" : "M 10 12 L 21 12",
-        opacity: isOpen ? 0 : 1
-      }}
-      transition={{ duration: 0.35, ease: "easeInOut" }}
+    <motion.span
+      style={{ position: 'absolute', width: '16px', height: '2px', background: 'currentColor', borderRadius: '2px', right: 1 }}
+      animate={isOpen ? { opacity: 0, x: 10 } : { opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
     />
-    
-    {/* Bottom Line - Morphs to bottom-left to top-right of X */}
-    <motion.path
-      animate={{
-        d: isOpen ? "M 5 19 L 19 5" : "M 3 18 L 14 18",
-        stroke: isOpen ? "#5EEAD4" : "currentColor"
-      }}
-      transition={{ duration: 0.35, ease: "easeInOut" }}
+    <motion.span
+      style={{ position: 'absolute', width: '22px', height: '2px', background: isOpen ? '#5EEAD4' : 'currentColor', borderRadius: '2px' }}
+      animate={isOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 7 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
     />
-  </motion.svg>
+  </motion.div>
 );
 
 export default function Navbar() {
@@ -185,10 +167,10 @@ export default function Navbar() {
         {mobileOpen && (
           <motion.div
             className="mobile-menu"
-            initial={{ opacity: 0, clipPath: 'circle(0% at top right)' }}
-            animate={{ opacity: 1, clipPath: 'circle(150% at top right)' }}
-            exit={{ opacity: 0, clipPath: 'circle(0% at top right)' }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: '-100%' }}
+            animate={{ opacity: 1, y: '0%' }}
+            exit={{ opacity: 0, y: '-100%' }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="mobile-menu-content">
               {navLinks.map(({ label, href }, i) => (
@@ -403,12 +385,14 @@ export default function Navbar() {
         .mobile-menu {
           position: fixed;
           inset: 0;
-          z-index: 999;
+          z-index: 998;
           background: rgba(8, 17, 15, 0.98);
           backdrop-filter: blur(30px);
+          -webkit-backdrop-filter: blur(30px);
           display: flex;
           align-items: center;
           padding: 2rem;
+          padding-top: 6rem;
         }
         
         .mobile-menu-content {

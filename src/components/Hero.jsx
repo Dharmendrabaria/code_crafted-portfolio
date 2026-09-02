@@ -402,6 +402,11 @@ export default function Hero() {
           font-size: clamp(0.7rem, 1.5vw, 0.85rem);
           line-height: 1.8;
         }
+        .hero-code-body code {
+          display: block;
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
         .c-keyword { color: #c792ea; }
         .c-fn { color: #82aaff; }
         .c-op { color: var(--text-dim); }
@@ -510,7 +515,8 @@ export default function Hero() {
             font-size: 1.75rem;
           }
           .hero-right {
-            max-width: 280px;
+            width: 100%;
+            max-width: 100%;
           }
           .hero-actions {
             flex-direction: column;

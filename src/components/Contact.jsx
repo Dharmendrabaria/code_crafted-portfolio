@@ -149,7 +149,7 @@ export default function Contact() {
 
             {/* WhatsApp Card */}
             <motion.a
-              href="https://wa.me/918799462715"
+              href={`https://wa.me/918799462715?text=${encodeURIComponent("Hello Code Crafted,\n\nI came across your portfolio and would like to discuss a project or collaboration opportunity. I would be happy to share the requirements and discuss the details with you.\n\nThank you.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="bento-card bento-mini-card whatsapp-card"
@@ -403,6 +403,7 @@ export default function Contact() {
         .bento-mini-card p {
           color: var(--text-dim);
           font-size: 0.9rem;
+          word-break: break-all;
         }
 
         .copy-btn {
