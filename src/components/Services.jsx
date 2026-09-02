@@ -178,7 +178,7 @@ export default function Services() {
           display: flex;
           align-items: center;
           gap: 1.5rem;
-          padding: 1.5rem 0;
+          padding: 1rem 0;
           position: relative;
           cursor: pointer;
           transition: opacity 0.3s;
@@ -368,7 +368,7 @@ export default function Services() {
           }
           .service-list-item {
             gap: 1rem;
-            padding: 1rem 0;
+            padding: 0.75rem 0;
           }
           .spotlight-icon-wrapper {
             width: 60px;
