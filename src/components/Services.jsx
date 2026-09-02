@@ -332,7 +332,7 @@ export default function Services() {
           color: var(--text-dim);
         }
 
-        /* ===== TABLET ===== */
+        /* ===== TABLET & MOBILE ===== */
         @media (max-width: 1024px) {
           .services-split-layout {
             grid-template-columns: 1fr;
@@ -340,15 +340,55 @@ export default function Services() {
           }
           .services-list-container {
             display: flex; 
-            order: 2;
-            padding-top: 0;
+            flex-direction: row;
+            order: 1;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1rem;
+            /* Make it sticky on top so they can always change it */
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+            background: rgba(8, 17, 16, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 -1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+          }
+          .service-list-item {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            padding: 0.75rem 1.25rem;
+            background: rgba(17, 32, 29, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+            opacity: 0.6;
+            gap: 0.5rem;
+          }
+          .service-list-item.is-active {
+            opacity: 1;
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.2);
+          }
+          .service-list-num {
+            font-size: 0.8rem;
+          }
+          .service-list-title {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transform: none !important;
+          }
+          .service-list-line {
+            display: none;
           }
           .services-spotlight-container {
-            order: 1;
+            order: 2;
           }
           .spotlight-sticky-wrapper {
-            position: sticky;
-            top: 100px;
+            position: relative;
+            top: 0;
             z-index: 10;
             min-height: auto;
           }
@@ -357,18 +397,10 @@ export default function Services() {
           }
         }
 
-        /* ===== MOBILE ===== */
+        /* ===== SMALL MOBILE ===== */
         @media (max-width: 640px) {
-          .spotlight-sticky-wrapper {
-            position: relative;
-            top: 0;
-          }
           .spotlight-card {
             min-height: auto;
-          }
-          .service-list-item {
-            gap: 1rem;
-            padding: 0.75rem 0;
           }
           .spotlight-icon-wrapper {
             width: 60px;

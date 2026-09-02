@@ -688,9 +688,11 @@ export default function Workflow() {
           .orbital-content {
             width: 100%;
             max-width: 600px;
+            order: 2;
           }
           .orbital-dial-wrapper {
             min-height: 400px;
+            order: 1;
           }
           .dial-scaler {
             transform: scale(0.8);
