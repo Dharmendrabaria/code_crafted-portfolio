@@ -294,14 +294,15 @@ export default function Footer() {
 
         .footer-massive-text h1 {
           font-family: var(--font-display);
-          font-size: clamp(8vw, 11vw, 11vw);
+          font-size: clamp(3rem, 11vw, 11vw);
           font-weight: 800;
-          line-height: 0.8;
+          line-height: 0.9;
           color: transparent;
           -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
           text-transform: uppercase;
           letter-spacing: -0.02em;
-          white-space: nowrap;
+          text-align: center;
+          word-wrap: break-word;
           transition: all 0.5s ease;
           background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0));
           -webkit-background-clip: text;

@@ -16,7 +16,7 @@ const CreativeHamburger = ({ isOpen }) => (
     style={{ width: 24, height: 24, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
   >
     <motion.span
-      style={{ position: 'absolute', width: '22px', height: '2px', background: isOpen ? '#5EEAD4' : 'currentColor', borderRadius: '2px' }}
+      style={{ position: 'absolute', width: '22px', height: '2px', background: 'currentColor', borderRadius: '2px' }}
       animate={isOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -7 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     />
@@ -26,7 +26,7 @@ const CreativeHamburger = ({ isOpen }) => (
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     />
     <motion.span
-      style={{ position: 'absolute', width: '22px', height: '2px', background: isOpen ? '#5EEAD4' : 'currentColor', borderRadius: '2px' }}
+      style={{ position: 'absolute', width: '22px', height: '2px', background: 'currentColor', borderRadius: '2px' }}
       animate={isOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 7 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     />

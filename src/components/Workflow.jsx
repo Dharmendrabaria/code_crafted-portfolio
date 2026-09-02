@@ -682,7 +682,7 @@ export default function Workflow() {
         /* ===== TABLET ===== */
         @media (max-width: 1024px) {
           .workflow-orbital-container {
-            flex-direction: column-reverse;
+            flex-direction: column;
             gap: 2rem;
           }
           .orbital-content {
