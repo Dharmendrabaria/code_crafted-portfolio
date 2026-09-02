@@ -229,13 +229,14 @@ export default function Hero() {
 
       <style>{`
         .hero {
-          height: 100vh;
-          min-height: 600px;
+          min-height: 100svh;
+          min-height: 100vh;
           display: flex;
           align-items: center;
           position: relative;
           overflow: hidden;
-          padding-top: 4rem;
+          padding-top: 5rem;
+          padding-bottom: 4rem;
         }
         .hero-bg {
           position: absolute;
@@ -262,10 +263,9 @@ export default function Hero() {
           z-index: 1;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 2rem;
+          gap: clamp(1.5rem, 4vw, 3rem);
           align-items: center;
-          padding-top: 1rem;
-          padding-bottom: 1rem;
+          width: 100%;
         }
         .hero-left {
           display: flex;
@@ -277,7 +277,7 @@ export default function Hero() {
           align-items: center;
           gap: 0.75rem;
           font-family: var(--font-mono);
-          font-size: 0.75rem;
+          font-size: clamp(0.6rem, 1.5vw, 0.75rem);
           letter-spacing: 0.2em;
           color: var(--accent);
         }
@@ -288,13 +288,14 @@ export default function Hero() {
           background: var(--accent);
           box-shadow: 0 0 12px var(--accent-glow-strong);
           animation: pulse 2s ease-in-out infinite;
+          flex-shrink: 0;
         }
         @keyframes pulse {
           0%, 100% { opacity: 1; box-shadow: 0 0 12px var(--accent-glow-strong); }
           50% { opacity: 0.5; box-shadow: 0 0 20px var(--accent-glow-strong); }
         }
         .hero-heading {
-          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-size: clamp(2rem, 4.5vw, 4rem);
           font-weight: 700;
           line-height: 1.1;
           letter-spacing: -0.03em;
@@ -315,7 +316,7 @@ export default function Hero() {
           background-clip: text;
         }
         .hero-desc {
-          font-size: 1.1rem;
+          font-size: clamp(0.95rem, 2vw, 1.1rem);
           color: var(--text-muted);
           max-width: 480px;
           line-height: 1.6;
@@ -328,7 +329,7 @@ export default function Hero() {
         .hero-stats {
           display: flex;
           align-items: center;
-          gap: 2rem;
+          gap: clamp(1rem, 3vw, 2rem);
           margin-top: 0.5rem;
           padding-top: 1rem;
           border-top: 1px solid var(--border);
@@ -341,12 +342,12 @@ export default function Hero() {
         }
         .hero-stat-num {
           font-family: var(--font-display);
-          font-size: 1.75rem;
+          font-size: clamp(1.25rem, 3vw, 1.75rem);
           font-weight: 700;
           color: var(--accent);
         }
         .hero-stat-label {
-          font-size: 0.8rem;
+          font-size: clamp(0.7rem, 1.5vw, 0.8rem);
           color: var(--text-dim);
           letter-spacing: 0.05em;
         }
@@ -396,9 +397,9 @@ export default function Hero() {
           color: var(--text-dim);
         }
         .hero-code-body {
-          padding: 1.5rem;
+          padding: clamp(1rem, 3vw, 1.5rem);
           font-family: var(--font-mono);
-          font-size: 0.85rem;
+          font-size: clamp(0.7rem, 1.5vw, 0.85rem);
           line-height: 1.8;
         }
         .c-keyword { color: #c792ea; }
@@ -421,7 +422,7 @@ export default function Hero() {
           background: rgba(17, 32, 29, 0.9);
           border: 1px solid var(--border);
           border-radius: 100px;
-          font-size: 0.8rem;
+          font-size: clamp(0.7rem, 1.5vw, 0.8rem);
           font-weight: 500;
           color: var(--text-primary);
           backdrop-filter: blur(10px);
@@ -454,7 +455,23 @@ export default function Hero() {
           letter-spacing: 0.2em;
           color: var(--text-dim);
         }
+
+        /* ===== TABLET ===== */
         @media (max-width: 1024px) {
+          .hero-content {
+            grid-template-columns: 1.2fr 1fr;
+          }
+          .hero-floating-badges {
+            display: none;
+          }
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+          .hero {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+          }
           .hero-content {
             grid-template-columns: 1fr;
             text-align: center;
@@ -475,18 +492,51 @@ export default function Hero() {
             justify-content: center;
           }
           .hero-right {
+            order: -1;
+            max-width: 360px;
+            margin: 0 auto;
+          }
+          .hero-badge-2 {
+            left: -10px;
+          }
+          .hero-scroll {
             display: none;
           }
         }
-        @media (max-width: 480px) {
+
+        /* ===== VERY SMALL MOBILE ===== */
+        @media (max-width: 380px) {
           .hero-heading {
-            font-size: 2.25rem;
+            font-size: 1.75rem;
           }
-          .hero-stats {
-            gap: 1.25rem;
+          .hero-right {
+            max-width: 280px;
           }
-          .hero-stat-num {
-            font-size: 1.4rem;
+          .hero-actions {
+            flex-direction: column;
+            width: 100%;
+          }
+          .hero-actions .btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        /* ===== LANDSCAPE MOBILE ===== */
+        @media (max-height: 500px) and (orientation: landscape) {
+          .hero {
+            min-height: auto;
+            padding-top: 5rem;
+            padding-bottom: 2rem;
+          }
+          .hero-content {
+            grid-template-columns: 1fr 1fr;
+          }
+          .hero-right {
+            order: 0;
+          }
+          .hero-scroll {
+            display: none;
           }
         }
       `}</style>

@@ -206,7 +206,7 @@ export default function Services() {
 
         .service-list-title {
           font-family: var(--font-display);
-          font-size: 2.2rem;
+          font-size: clamp(1.5rem, 3vw, 2.2rem);
           font-weight: 700;
           color: var(--text-primary);
           transition: transform 0.4s ease;
@@ -231,18 +231,18 @@ export default function Services() {
 
         .spotlight-sticky-wrapper {
           position: sticky;
-          top: 20vh; /* Sticks nicely in the middle of the screen */
-          height: 500px;
+          top: 20vh;
+          min-height: 400px;
           display: flex;
           align-items: center;
         }
 
         .spotlight-card {
           width: 100%;
-          height: 100%;
+          min-height: 400px;
           background: rgba(17, 32, 29, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 32px;
+          border-radius: clamp(20px, 4vw, 32px);
           overflow: hidden;
           position: relative;
           backdrop-filter: blur(20px);
@@ -265,7 +265,7 @@ export default function Services() {
           display: flex;
           flex-direction: column;
           height: 100%;
-          padding: 3.5rem;
+          padding: clamp(2rem, 4vw, 3.5rem);
         }
 
         .spotlight-icon-wrapper {
@@ -275,7 +275,7 @@ export default function Services() {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 2.5rem;
+          margin-bottom: 2rem;
         }
 
         .spotlight-icon-bg {
@@ -290,19 +290,19 @@ export default function Services() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 1.25rem;
         }
 
         .spotlight-title {
           font-family: var(--font-display);
-          font-size: 2.25rem;
+          font-size: clamp(1.5rem, 3vw, 2.25rem);
           font-weight: 700;
           color: var(--text-primary);
           line-height: 1.1;
         }
 
         .spotlight-desc {
-          font-size: 1.15rem;
+          font-size: clamp(0.9rem, 1.8vw, 1.15rem);
           color: var(--text-muted);
           line-height: 1.7;
         }
@@ -312,13 +312,13 @@ export default function Services() {
           align-items: baseline;
           gap: 1rem;
           margin-top: auto;
-          padding-top: 2rem;
+          padding-top: 1.5rem;
           border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .spotlight-num {
           font-family: var(--font-display);
-          font-size: 4rem;
+          font-size: clamp(2.5rem, 5vw, 4rem);
           font-weight: 800;
           line-height: 0.8;
           opacity: 0.2;
@@ -332,53 +332,48 @@ export default function Services() {
           color: var(--text-dim);
         }
 
+        /* ===== TABLET ===== */
         @media (max-width: 1024px) {
           .services-split-layout {
             grid-template-columns: 1fr;
             gap: 2rem;
           }
-          .spotlight-sticky-wrapper {
-            position: relative;
-            top: 0;
-            height: auto;
-            min-height: 400px;
-          }
-          .services-list-container {
-            display: none; /* Hide the list on mobile, or redesign */
-          }
-          /* Wait, if we hide the list on mobile, how do they navigate? 
-             Instead of hiding, let's keep the list but put the spotlight at the top! */
-        }
-
-        /* Mobile specific fixes */
-        @media (max-width: 1024px) {
           .services-list-container {
             display: flex; 
-            order: 2; /* List below the spotlight */
+            order: 2;
             padding-top: 0;
           }
           .services-spotlight-container {
-            order: 1; /* Spotlight above the list */
+            order: 1;
           }
           .spotlight-sticky-wrapper {
             position: sticky;
-            top: 100px; /* Sticks to top on mobile so you can see it change while scrolling the list */
+            top: 100px;
             z-index: 10;
+            min-height: auto;
           }
           .spotlight-card {
-            min-height: 350px;
+            min-height: 300px;
           }
-          .spotlight-content {
-            padding: 2.5rem;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 640px) {
+          .spotlight-sticky-wrapper {
+            position: relative;
+            top: 0;
           }
-          .spotlight-title {
-            font-size: 1.8rem;
+          .spotlight-card {
+            min-height: auto;
           }
-          .spotlight-desc {
-            font-size: 1rem;
+          .service-list-item {
+            gap: 1rem;
+            padding: 1rem 0;
           }
-          .service-list-title {
-            font-size: 1.5rem;
+          .spotlight-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1.5rem;
           }
         }
       `}</style>

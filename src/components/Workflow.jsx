@@ -407,7 +407,7 @@ export default function Workflow() {
           position: relative;
           z-index: 1;
           font-family: var(--font-display);
-          font-size: 3rem;
+          font-size: clamp(1.75rem, 4vw, 3rem);
           font-weight: 800;
           color: var(--text-primary);
           margin-bottom: 1rem;
@@ -417,10 +417,10 @@ export default function Workflow() {
         .step-desc {
           position: relative;
           z-index: 1;
-          font-size: 1.15rem;
+          font-size: clamp(0.95rem, 1.8vw, 1.15rem);
           color: var(--text-muted);
           line-height: 1.6;
-          margin-bottom: 2.5rem;
+          margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
         }
 
         /* Unique Terminal Window inside card */
@@ -429,7 +429,7 @@ export default function Workflow() {
           border: 1px solid rgba(255,255,255,0.1);
           border-radius: 12px;
           overflow: hidden;
-          margin-bottom: 3.5rem;
+          margin-bottom: clamp(1.5rem, 4vw, 3.5rem);
           font-family: var(--font-mono);
           position: relative;
           z-index: 1;
@@ -462,7 +462,7 @@ export default function Workflow() {
 
         .terminal-body {
           padding: 1.25rem;
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.5vw, 0.85rem);
           color: var(--text-muted);
         }
         
@@ -508,6 +508,7 @@ export default function Workflow() {
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-shrink: 0;
         }
 
         /* NEW SVG Circuit Layer */
@@ -667,31 +668,41 @@ export default function Workflow() {
           100% { transform: scale(1.6); opacity: 0; }
         }
 
+        /* ===== TABLET ===== */
         @media (max-width: 1024px) {
           .workflow-orbital-container {
             flex-direction: column-reverse;
-            gap: 6rem;
+            gap: 2rem;
           }
           .orbital-content {
             width: 100%;
             max-width: 600px;
           }
           .orbital-dial-wrapper {
-            transform: scale(0.85);
-          }
-        }
-        
-        @media (max-width: 600px) {
-          .orbital-dial-wrapper {
-            transform: scale(0.65);
-            margin-top: -3rem;
+            transform: scale(0.8);
+            margin-top: -1rem;
             margin-bottom: -3rem;
           }
-          .card-glass-panel {
-            padding: 2.5rem 1.5rem;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 700px) {
+          .orbital-dial-wrapper {
+            transform: scale(0.65);
+            margin-top: -1.5rem;
+            margin-bottom: -5rem;
           }
-          .step-title {
-            font-size: 2rem;
+          .card-glass-panel {
+            padding: 2rem 1.5rem;
+          }
+        }
+
+        /* ===== SMALL MOBILE ===== */
+        @media (max-width: 480px) {
+          .orbital-dial-wrapper {
+            transform: scale(0.55);
+            margin-top: -2.5rem;
+            margin-bottom: -7rem;
           }
         }
       `}</style>

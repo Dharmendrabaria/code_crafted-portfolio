@@ -158,7 +158,7 @@ export default function Work() {
         }
         .work-header {
           text-align: center;
-          margin-bottom: 6rem;
+          margin-bottom: clamp(3rem, 6vw, 6rem);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -167,7 +167,7 @@ export default function Work() {
         .projects-stack {
           display: flex;
           flex-direction: column;
-          gap: 4rem; /* Gap when scrolling normally */
+          gap: 4rem;
           position: relative;
         }
         
@@ -185,7 +185,7 @@ export default function Work() {
           height: 100%;
           background: rgba(17, 32, 29, 0.7);
           border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 32px;
+          border-radius: clamp(20px, 4vw, 32px);
           overflow: hidden;
           position: relative;
           backdrop-filter: blur(20px);
@@ -211,11 +211,11 @@ export default function Work() {
         
         /* Left Info Side */
         .project-info {
-          padding: 4rem;
+          padding: clamp(1.5rem, 4vw, 4rem);
           display: flex;
           flex-direction: column;
           justify-content: center;
-          gap: 2rem;
+          gap: clamp(1rem, 2vw, 2rem);
         }
         .project-header {
           display: flex;
@@ -230,14 +230,14 @@ export default function Work() {
         }
         .project-title {
           font-family: var(--font-display);
-          font-size: 3.5rem;
+          font-size: clamp(2rem, 5vw, 3.5rem);
           font-weight: 700;
           line-height: 1.1;
           letter-spacing: -0.03em;
           color: var(--text-primary);
         }
         .project-desc {
-          font-size: 1.1rem;
+          font-size: clamp(0.9rem, 1.8vw, 1.1rem);
           color: var(--text-muted);
           line-height: 1.7;
           max-width: 90%;
@@ -245,13 +245,13 @@ export default function Work() {
         .project-tech {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.75rem;
+          gap: 0.5rem;
         }
         .project-tech-tag {
           font-family: var(--font-mono);
-          font-size: 0.75rem;
+          font-size: clamp(0.65rem, 1.2vw, 0.75rem);
           color: var(--text-primary);
-          padding: 0.5rem 1rem;
+          padding: 0.4rem 0.8rem;
           background: rgba(255, 255, 255, 0.03);
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 100px;
@@ -262,14 +262,15 @@ export default function Work() {
           display: flex;
           align-items: center;
           gap: 1.5rem;
-          margin-top: 1rem;
+          margin-top: 0.5rem;
+          flex-wrap: wrap;
         }
         .project-link {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
           font-family: var(--font-mono);
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.5vw, 0.85rem);
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.1em;
@@ -278,7 +279,7 @@ export default function Work() {
         .primary-link {
           color: var(--bg-primary);
           background: var(--text-primary);
-          padding: 1rem 1.5rem;
+          padding: 0.8rem 1.25rem;
           border-radius: 100px;
         }
         .primary-link:hover {
@@ -324,6 +325,7 @@ export default function Work() {
           padding: 0 1rem;
           gap: 6px;
           border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          flex-shrink: 0;
         }
         .browser-dot {
           width: 10px;
@@ -351,7 +353,7 @@ export default function Work() {
         }
         .mockup-logo {
           font-family: var(--font-display);
-          font-size: 2.5rem;
+          font-size: clamp(1.5rem, 3vw, 2.5rem);
           font-weight: 700;
           letter-spacing: -0.05em;
         }
@@ -371,7 +373,11 @@ export default function Work() {
         .w-1\\/2 { width: 50%; }
         .w-5\\/6 { width: 83%; }
 
+        /* ===== TABLET ===== */
         @media (max-width: 1024px) {
+          .work-section {
+            padding-bottom: 6rem;
+          }
           .project-card-container {
             height: auto;
             max-height: none;
@@ -390,19 +396,38 @@ export default function Work() {
           .project-visual {
             border-left: none;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            min-height: 300px;
+            min-height: 250px;
           }
           .project-info {
-            padding: 3rem 2rem;
+            padding: 2.5rem 2rem;
+          }
+          .project-desc {
+            max-width: 100%;
           }
         }
+
+        /* ===== MOBILE ===== */
         @media (max-width: 640px) {
-          .project-title {
-            font-size: 2.5rem;
+          .project-info {
+            padding: 1.5rem;
           }
+          .project-visual {
+            min-height: 200px;
+            padding: 1.25rem;
+          }
+        }
+
+        /* ===== VERY SMALL MOBILE ===== */
+        @media (max-width: 380px) {
           .project-links {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+          }
+          .primary-link {
+            justify-content: center;
+          }
+          .secondary-link {
+            justify-content: center;
           }
         }
       `}</style>

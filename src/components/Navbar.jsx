@@ -441,6 +441,30 @@ export default function Navbar() {
             width: 100%; max-width: 100%;
           }
         }
+
+        @media (max-width: 480px) {
+          .navbar-wrapper { padding: 0.75rem; }
+          .brand-text { display: none; }
+          .navbar-brand { gap: 0.5rem; }
+          .brand-logo-icon-container { width: 36px; height: 36px; }
+          .navbar-island.is-scrolled {
+            padding: 0.4rem 0.4rem 0.4rem 1rem;
+          }
+          .mobile-menu-link {
+            font-size: clamp(1.75rem, 8vw, 2.5rem);
+          }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+          .mobile-menu { padding: 1rem; }
+          .mobile-menu-content { gap: 0; }
+          .mobile-menu-link {
+            font-size: 1.5rem;
+            gap: 1rem;
+            line-height: 1.4;
+          }
+          .mobile-menu-footer { margin-top: 1rem; padding-top: 1rem; }
+        }
       `}</style>
     </>
   );

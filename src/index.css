@@ -35,9 +35,10 @@
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
-  /* Spacing */
-  --section-padding: 7rem;
+  /* Spacing — Fluid */
+  --section-padding: clamp(4rem, 8vw, 7rem);
   --container-max: 1140px;
+  --container-padding: clamp(1rem, 4vw, 2rem);
 
   /* Glassmorphism */
   --glass-bg: rgba(17, 32, 29, 0.4);
@@ -98,7 +99,7 @@ ol {
 }
 
 /* =====================================================
-   Typography
+   Typography — Fluid
    ===================================================== */
 h1,
 h2,
@@ -115,7 +116,7 @@ h6 {
 
 .section-label {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
@@ -134,7 +135,7 @@ h6 {
 }
 
 .section-title {
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-size: clamp(1.75rem, 5vw, 3.75rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -142,7 +143,7 @@ h6 {
 }
 
 .section-subtitle {
-  font-size: 1.125rem;
+  font-size: clamp(0.95rem, 2vw, 1.125rem);
   color: var(--text-muted);
   max-width: 540px;
   line-height: 1.7;
@@ -156,12 +157,13 @@ h6 {
 }
 
 /* =====================================================
-   Layout
+   Layout — Responsive Container
    ===================================================== */
 .container {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--container-padding);
+  width: 100%;
 }
 
 .section {
@@ -185,7 +187,7 @@ h6 {
 }
 
 /* =====================================================
-   Buttons
+   Buttons — Responsive
    ===================================================== */
 .btn {
   display: inline-flex;
@@ -195,7 +197,7 @@ h6 {
   border-radius: 100px;
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   transition: all 0.4s var(--ease-out);
   position: relative;
   overflow: hidden;
@@ -283,28 +285,5 @@ h6 {
 
   html {
     scroll-behavior: auto;
-  }
-}
-
-/* =====================================================
-   Responsive
-   ===================================================== */
-@media (max-width: 768px) {
-  :root {
-    --section-padding: 5rem;
-  }
-
-  .container {
-    padding: 0 1.25rem;
-  }
-
-  .section-title {
-    font-size: clamp(1.75rem, 7vw, 2.5rem);
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --section-padding: 4rem;
   }
 }

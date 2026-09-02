@@ -125,19 +125,18 @@ export default function Footer() {
         .footer-premium {
           position: relative;
           background: #050807;
-          padding-top: 0; 
+          padding-top: 2rem; 
           padding-bottom: 2rem;
-          margin-top: -5rem; /* Massive negative margin to completely eliminate any possible gap */
           border-top: 1px solid rgba(255, 255, 255, 0.05);
-          overflow: visible; /* Must be visible so the CTA box doesn't get clipped */
-          z-index: 10; /* Force footer to render on top of contact section */
+          overflow: visible;
+          z-index: 10;
         }
 
         .footer-cta-band {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 3rem 3rem;
+          padding: clamp(2rem, 4vw, 3rem);
           border: 1px solid var(--border);
           border-radius: 20px;
           background: linear-gradient(135deg, rgba(94, 234, 212, 0.04) 0%, rgba(5, 8, 7, 0.8) 60%);
@@ -145,8 +144,8 @@ export default function Footer() {
           -webkit-backdrop-filter: blur(20px);
           position: relative;
           z-index: 10;
-          margin-bottom: 5rem;
-          margin-top: -3rem; /* Push the CTA box itself UP */
+          margin-bottom: clamp(3rem, 5vw, 5rem);
+          gap: 1.5rem;
         }
         
         .footer-cta-band::before {
@@ -162,7 +161,7 @@ export default function Footer() {
         }
         
         .footer-cta-heading {
-          font-size: clamp(1.25rem, 3vw, 1.75rem);
+          font-size: clamp(1.1rem, 3vw, 1.75rem);
           font-weight: 600;
         }
 
@@ -180,8 +179,8 @@ export default function Footer() {
         .footer-top {
           display: grid;
           grid-template-columns: 1.5fr 1fr 1fr;
-          gap: 4rem;
-          padding-bottom: 4rem;
+          gap: clamp(2rem, 4vw, 4rem);
+          padding-bottom: clamp(2rem, 4vw, 4rem);
           position: relative;
           z-index: 2;
         }
@@ -288,14 +287,14 @@ export default function Footer() {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-bottom: 4rem;
+          margin-bottom: clamp(2rem, 4vw, 4rem);
           position: relative;
           z-index: 1;
         }
 
         .footer-massive-text h1 {
           font-family: var(--font-display);
-          font-size: 11vw;
+          font-size: clamp(8vw, 11vw, 11vw);
           font-weight: 800;
           line-height: 0.8;
           color: transparent;
@@ -321,6 +320,8 @@ export default function Footer() {
           border-top: 1px solid rgba(255, 255, 255, 0.05);
           position: relative;
           z-index: 2;
+          flex-wrap: wrap;
+          gap: 1rem;
         }
 
         .footer-bottom-bar p {
@@ -360,12 +361,12 @@ export default function Footer() {
           transform: translateY(-3px);
         }
 
+        /* ===== TABLET ===== */
         @media (max-width: 900px) {
           .footer-cta-band {
             flex-direction: column;
             gap: 1.5rem;
             text-align: center;
-            padding: 2.5rem 2rem;
           }
           .footer-top {
             grid-template-columns: 1fr;
@@ -385,9 +386,29 @@ export default function Footer() {
             font-size: 14vw;
           }
           .footer-bottom-bar {
-            flex-direction: column;
-            gap: 1rem;
+            justify-content: center;
             text-align: center;
+          }
+        }
+
+        /* ===== SMALL MOBILE ===== */
+        @media (max-width: 480px) {
+          .footer-premium {
+            padding-bottom: 1.5rem;
+          }
+          .footer-cta-band {
+            padding: 1.5rem;
+            border-radius: 16px;
+          }
+          .footer-massive-text h1 {
+            font-size: 16vw;
+          }
+          .footer-bottom-bar {
+            flex-direction: column;
+            gap: 0.75rem;
+          }
+          .back-to-top-btn {
+            font-size: 0.75rem;
           }
         }
       `}</style>

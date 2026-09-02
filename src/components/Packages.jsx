@@ -505,16 +505,52 @@ export default function Packages() {
           transform: translateZ(50px) translateY(-2px);
         }
 
+        /* ===== TABLET ===== */
         @media (max-width: 1024px) {
-          .pricing-grid-3d {
-            grid-template-columns: 1fr;
-            gap: 3rem;
-          }
           .premium-card-wrapper {
-            transform: none !important; /* Disable 3D tilt on mobile */
+            transform: none !important;
           }
           .card-inner-surface {
             transform: none !important;
+          }
+          .btn-premium-action {
+            transform: none !important;
+          }
+          .btn-premium-action:hover {
+            transform: translateY(-2px) !important;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .pricing-grid-3d {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+          }
+          .premium-card-wrapper.is-popular {
+            grid-column: span 2;
+            max-width: 450px;
+            margin: 0 auto;
+          }
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 640px) {
+          .pricing-grid-3d {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .premium-card-wrapper.is-popular {
+            grid-column: span 1;
+            max-width: none;
+          }
+          .card-inner-surface {
+            padding: 2rem 1.25rem;
+          }
+          .tier-name {
+            font-size: 1.2rem;
+          }
+          .price-num {
+            font-size: 2.25rem;
           }
         }
       `}</style>

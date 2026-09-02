@@ -474,6 +474,28 @@ export default function Contact() {
           }
           .bento-card {
             padding: 1.5rem;
+            border-radius: 18px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .bento-card {
+            padding: 1.25rem;
+          }
+          .bento-header h3 {
+            font-size: 1.5rem;
+          }
+          .bento-submit-btn {
+            padding: 1rem;
+            font-size: 0.85rem;
+          }
+          .mini-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+          }
+          .bento-mini-card {
+            padding: 1.25rem;
           }
         }
       `}</style>

@@ -319,9 +319,32 @@ export default function TechStack() {
           border-radius: 4px;
         }
 
+        @media (max-width: 768px) {
+          .tech-grid-modern {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          }
+        }
+
         @media (max-width: 640px) {
           .tech-grid-modern {
             grid-template-columns: 1fr;
+          }
+          .tech-card-modern {
+            padding: 1.25rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .tech-tabs {
+            flex-direction: column;
+            width: 100%;
+            border-radius: 20px;
+          }
+          .tech-tab {
+            width: 100%;
+          }
+          .tab-active-bg {
+            border-radius: 12px;
           }
         }
       `}</style>

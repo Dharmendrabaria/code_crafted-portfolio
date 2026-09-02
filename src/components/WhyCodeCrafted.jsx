@@ -457,7 +457,16 @@ export default function WhyCodeCrafted() {
         @media (max-width: 768px) {
           .why-bento-grid { grid-template-columns: 1fr; }
           .bento-wide, .bento-square { grid-column: span 1; }
-          .why-bento-card { min-height: 260px; padding: 2rem; }
+          .why-bento-card { min-height: 240px; padding: 2rem; }
+          .why-title { font-size: 1.4rem; }
+          .why-desc { font-size: 0.9rem; }
+          .bg-icon-watermark svg { width: 200px; height: 200px; }
+        }
+
+        @media (max-width: 480px) {
+          .why-bento-card { padding: 1.5rem; min-height: 220px; }
+          .why-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; }
+          .badge-exclusive { font-size: 0.55rem; padding: 0.25rem 0.6rem; }
         }
       `}</style>
     </section>

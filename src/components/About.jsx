@@ -327,7 +327,23 @@ export default function About() {
             grid-template-columns: 1fr;
           }
           .bento-card {
-            padding: 2rem 1.5rem;
+            padding: 1.75rem 1.25rem;
+            border-radius: 20px;
+          }
+          .stat-number {
+            font-size: 3.5rem;
+          }
+          .bento-title {
+            font-size: 1.5rem;
+          }
+          .bento-text {
+            font-size: 0.95rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .bento-card {
+            padding: 1.5rem 1rem;
           }
         }
       `}</style>

@@ -355,7 +355,7 @@ export default function Testimonials() {
           top: 50%; 
           width: 100%;
           max-width: 600px; 
-          height: auto; /* DYNAMIC HEIGHT - NEVER CUTS OFF */
+          height: auto;
           min-height: 320px;
           border-radius: 26px;
           padding: 1px;
@@ -372,7 +372,7 @@ export default function Testimonials() {
           height: 100%;
           background: rgba(12, 22, 20, 0.88);
           border-radius: 25px;
-          padding: 3.5rem 3.5rem; 
+          padding: clamp(2rem, 4vw, 3.5rem); 
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           overflow: hidden; 
@@ -399,17 +399,17 @@ export default function Testimonials() {
           transform: translateZ(40px);
         }
 
-        .stars-container { display: flex; gap: 0.4rem; margin-bottom: 2rem; }
+        .stars-container { display: flex; gap: 0.4rem; margin-bottom: 1.5rem; }
         .star-icon { filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.6)); }
 
         .review-text {
           font-family: var(--font-display);
-          font-size: 1.25rem;
+          font-size: clamp(1rem, 2vw, 1.25rem);
           line-height: 1.7;
           color: var(--text-primary);
           font-weight: 500;
           letter-spacing: 0.01em;
-          margin-bottom: 2.5rem; 
+          margin-bottom: 2rem; 
         }
 
         .author-info-holographic { display: flex; align-items: center; gap: 1.2rem; margin-top: auto; }
@@ -436,8 +436,8 @@ export default function Testimonials() {
           border-radius: 2px;
         }
 
-        .slider-controls { display: flex; align-items: center; justify-content: center; gap: 3rem; margin-top: 1.5rem; z-index: 30; }
-        .hologram-btn { width: 48px; height: 48px; border-radius: 50%; background: rgba(17, 32, 29, 0.6); border: 1px solid rgba(94, 234, 212, 0.2); color: var(--accent); display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s; }
+        .slider-controls { display: flex; align-items: center; justify-content: center; gap: clamp(1.5rem, 4vw, 3rem); margin-top: 1.5rem; z-index: 30; }
+        .hologram-btn { width: 48px; height: 48px; border-radius: 50%; background: rgba(17, 32, 29, 0.6); border: 1px solid rgba(94, 234, 212, 0.2); color: var(--accent); display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s; flex-shrink: 0; }
         .hologram-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 25px rgba(94, 234, 212, 0.5); transform: scale(1.1); }
         
         .slider-dots { display: flex; gap: 0.6rem; }
@@ -445,17 +445,28 @@ export default function Testimonials() {
         .cyber-dot:hover { background: rgba(255, 255, 255, 0.4); }
         .cyber-dot.active { background: var(--accent); width: 60px; box-shadow: 0 0 15px var(--accent); }
 
+        /* ===== TABLET ===== */
         @media (max-width: 1024px) {
           .hologram-card-wrapper { max-width: 520px; }
-          .review-text { font-size: 1.15rem; }
         }
         
+        /* ===== MOBILE ===== */
         @media (max-width: 768px) {
-          .coverflow-track { height: 440px; }
-          .hologram-card-wrapper { max-width: 85%; }
-          .card-glass-body { padding: 2rem; }
-          .review-text { font-size: 1.1rem; }
+          .coverflow-track { height: 420px; }
+          .hologram-card-wrapper { max-width: 90%; }
           .hologram-card-wrapper:not(.is-active) { opacity: 0 !important; pointer-events: none; }
+          .quote-mark-parallax { display: none; }
+          .card-content-inner { transform: none; }
+        }
+
+        /* ===== SMALL MOBILE ===== */
+        @media (max-width: 480px) {
+          .coverflow-track { height: 380px; }
+          .hologram-card-wrapper { min-height: 280px; }
+          .avatar-core { width: 40px; height: 40px; font-size: 1.1rem; }
+          .hologram-btn { width: 40px; height: 40px; }
+          .cyber-dot { width: 24px; }
+          .cyber-dot.active { width: 40px; }
         }
       `}</style>
     </section>
