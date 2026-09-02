@@ -13,39 +13,40 @@ const navLinks = [
 
 const CreativeHamburger = ({ isOpen }) => (
   <motion.svg
-    width="24"
-    height="24"
+    width="26"
+    height="26"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="2.5"
     strokeLinecap="round"
     style={{ overflow: 'visible' }}
   >
-    {/* Top Line -> Top-Left to Bottom-Right of X */}
+    {/* Top Line - Morphs to top-left to bottom-right of X */}
     <motion.path
       animate={{
-        d: isOpen ? "M6 6L18 18" : "M3 6h18",
+        d: isOpen ? "M 5 5 L 19 19" : "M 3 6 L 21 6",
         stroke: isOpen ? "#5EEAD4" : "currentColor"
       }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
     />
-    {/* Middle Line -> Fades out and slides left */}
+    
+    {/* Middle Line - Shrinks to center and fades out */}
     <motion.path
-      d="M3 12h12"
       animate={{
-        opacity: isOpen ? 0 : 1,
-        x: isOpen ? -10 : 0
+        d: isOpen ? "M 12 12 L 12 12" : "M 10 12 L 21 12",
+        opacity: isOpen ? 0 : 1
       }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
     />
-    {/* Bottom Line -> Bottom-Left to Top-Right of X */}
+    
+    {/* Bottom Line - Morphs to bottom-left to top-right of X */}
     <motion.path
       animate={{
-        d: isOpen ? "M6 18L18 6" : "M9 18h12",
+        d: isOpen ? "M 5 19 L 19 5" : "M 3 18 L 14 18",
         stroke: isOpen ? "#5EEAD4" : "currentColor"
       }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
     />
   </motion.svg>
 );
