@@ -147,6 +147,7 @@ export default function Footer() {
           margin-top: -6rem;
           margin-bottom: clamp(3rem, 5vw, 5rem);
           gap: 1.5rem;
+          overflow: hidden;
         }
         
         .footer-cta-band::before {
@@ -164,6 +165,8 @@ export default function Footer() {
         .footer-cta-heading {
           font-size: clamp(1.1rem, 3vw, 1.75rem);
           font-weight: 600;
+          position: relative;
+          z-index: 2;
         }
 
         .footer-glow {
@@ -171,7 +174,7 @@ export default function Footer() {
           bottom: 0;
           left: 50%;
           transform: translateX(-50%);
-          width: 80vw;
+          width: 100%;
           height: 300px;
           background: radial-gradient(ellipse at bottom, rgba(94, 234, 212, 0.1) 0%, transparent 70%);
           pointer-events: none;

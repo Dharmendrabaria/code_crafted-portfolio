@@ -124,6 +124,7 @@ export default function TechStack() {
           padding-top: 5rem;
           padding-bottom: 5rem;
           min-height: 80vh;
+          overflow: hidden;
         }
 
         .tech-bg-glow {
