@@ -125,7 +125,7 @@ export default function Footer() {
         .footer-premium {
           position: relative;
           background: #050807;
-          padding-top: 2rem; 
+          padding-top: 0; 
           padding-bottom: 2rem;
           border-top: 1px solid rgba(255, 255, 255, 0.05);
           overflow: visible;
@@ -143,8 +143,9 @@ export default function Footer() {
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           position: relative;
-          z-index: 10;
-          margin-bottom: clamp(3rem, 5vw, 5rem);
+          z-index: 50;
+          transform: translateY(-2rem);
+          margin-bottom: clamp(1rem, 3vw, 3rem);
           gap: 1.5rem;
         }
         
