@@ -11,6 +11,45 @@ const navLinks = [
   { label: 'Workflow', href: '#workflow' },
 ];
 
+const CreativeHamburger = ({ isOpen }) => (
+  <motion.svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    style={{ overflow: 'visible' }}
+  >
+    {/* Top Line -> Top-Left to Bottom-Right of X */}
+    <motion.path
+      animate={{
+        d: isOpen ? "M6 6L18 18" : "M3 6h18",
+        stroke: isOpen ? "#5EEAD4" : "currentColor"
+      }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+    />
+    {/* Middle Line -> Fades out and slides left */}
+    <motion.path
+      d="M3 12h12"
+      animate={{
+        opacity: isOpen ? 0 : 1,
+        x: isOpen ? -10 : 0
+      }}
+      transition={{ duration: 0.2 }}
+    />
+    {/* Bottom Line -> Bottom-Left to Top-Right of X */}
+    <motion.path
+      animate={{
+        d: isOpen ? "M6 18L18 6" : "M9 18h12",
+        stroke: isOpen ? "#5EEAD4" : "currentColor"
+      }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+    />
+  </motion.svg>
+);
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -133,9 +172,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label="Toggle menu"
               >
-                <motion.div animate={{ rotate: mobileOpen ? 90 : 0 }} transition={{ duration: 0.3 }}>
-                  {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-                </motion.div>
+                <CreativeHamburger isOpen={mobileOpen} />
               </button>
             </div>
           </div>
