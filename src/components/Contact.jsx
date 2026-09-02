@@ -7,13 +7,27 @@ const WHATSAPP_NUMBER = '918799462715';
 
 function buildWhatsAppMessage(data) {
   const lines = [
-    `🚀 *New Project Inquiry*`,
+    `*Subject: New Project Inquiry - Code Crafted*`,
     ``,
-    `👤 *Name:* ${data.name}`,
-    `📧 *Email:* ${data.email}`,
+    `Hello Dharmendra,`,
+    ``,
+    `I am reaching out to you from your portfolio website. I would like to discuss a potential collaboration. Please find my details below:`,
+    ``,
+    `*--- Client Details ---*`,
+    `*Name:* ${data.name}`,
+    `*Email:* ${data.email}`,
   ];
-  if (data.service) lines.push(`📂 *Service:* ${data.service}`);
-  lines.push(``, `💬 *Message:*`, data.message, ``, `— Sent from codecrafted.dev`);
+  if (data.service) lines.push(`*Service Required:* ${data.service}`);
+  lines.push(
+    ``, 
+    `*--- Message ---*`, 
+    data.message, 
+    ``, 
+    `Looking forward to your response.`,
+    ``,
+    `Best regards,`,
+    `${data.name}`
+  );
   return lines.join('\n');
 }
 
