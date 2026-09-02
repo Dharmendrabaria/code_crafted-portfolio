@@ -379,13 +379,8 @@ export default function Work() {
             padding-bottom: 6rem;
           }
           .project-card-container {
-            height: auto;
-            max-height: none;
-            position: relative;
-            top: 0 !important;
-          }
-          .project-card {
-            transform: none !important;
+            height: 85vh;
+            max-height: 800px;
           }
           .projects-stack {
             gap: 2rem;
