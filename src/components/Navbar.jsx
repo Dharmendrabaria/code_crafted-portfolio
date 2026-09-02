@@ -376,9 +376,11 @@ export default function Navbar() {
           justify-content: center;
           transition: all 0.3s;
         }
-        .navbar-mobile-toggle:hover {
-          background: var(--accent);
-          color: #000;
+        @media (hover: hover) {
+          .navbar-mobile-toggle:hover {
+            background: var(--accent);
+            color: #000;
+          }
         }
 
         /* --- PREMIUM MOBILE MENU --- */

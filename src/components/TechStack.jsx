@@ -40,9 +40,7 @@ export default function TechStack() {
             <span className="section-label">Capabilities</span>
             <h2 className="section-title">MY <span className="gradient-text">TECH STACK</span></h2>
           </div>
-        </motion.div>
-
-        <div className="tech-tabs-wrapper">
+          
           <div className="tech-tabs">
             {categories.map((cat) => (
               <button
@@ -62,7 +60,7 @@ export default function TechStack() {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         <motion.div layout className="tech-grid-modern">
           <AnimatePresence mode="popLayout">
@@ -145,20 +143,11 @@ export default function TechStack() {
           flex-direction: column;
           align-items: center;
           gap: 2.5rem;
-          margin-bottom: 2rem;
+          margin-bottom: 3.5rem;
         }
 
         .header-top {
           text-align: center;
-        }
-        
-        .tech-tabs-wrapper {
-          position: sticky;
-          top: 80px;
-          z-index: 50;
-          display: flex;
-          justify-content: center;
-          margin-bottom: 2.5rem;
         }
 
         .tech-tabs {
@@ -169,11 +158,13 @@ export default function TechStack() {
           padding: 0.5rem;
           border-radius: 100px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           flex-wrap: wrap;
           justify-content: center;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+          position: sticky;
+          top: 100px;
+          z-index: 50;
         }
 
         .tech-tab {

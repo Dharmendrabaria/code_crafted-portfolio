@@ -125,7 +125,7 @@ export default function Footer() {
         .footer-premium {
           position: relative;
           background: #050807;
-          padding-top: 0; 
+          padding-top: 2rem; 
           padding-bottom: 2rem;
           border-top: 1px solid rgba(255, 255, 255, 0.05);
           overflow: visible;
@@ -142,13 +142,9 @@ export default function Footer() {
           background: linear-gradient(135deg, rgba(94, 234, 212, 0.04) 0%, rgba(5, 8, 7, 0.8) 60%);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: calc(100% - 2rem);
-          max-width: 1200px;
+          position: relative;
           z-index: 10;
+          margin-bottom: clamp(3rem, 5vw, 5rem);
           gap: 1.5rem;
         }
         
@@ -184,7 +180,6 @@ export default function Footer() {
           display: grid;
           grid-template-columns: 1.5fr 1fr 1fr;
           gap: clamp(2rem, 4vw, 4rem);
-          padding-top: clamp(6rem, 8vw, 8rem);
           padding-bottom: clamp(2rem, 4vw, 4rem);
           position: relative;
           z-index: 2;
@@ -299,15 +294,14 @@ export default function Footer() {
 
         .footer-massive-text h1 {
           font-family: var(--font-display);
-          font-size: clamp(3rem, 11vw, 11vw);
+          font-size: clamp(8vw, 11vw, 11vw);
           font-weight: 800;
-          line-height: 0.9;
+          line-height: 0.8;
           color: transparent;
           -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
           text-transform: uppercase;
           letter-spacing: -0.02em;
-          text-align: center;
-          word-wrap: break-word;
+          white-space: nowrap;
           transition: all 0.5s ease;
           background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0));
           -webkit-background-clip: text;
@@ -389,7 +383,7 @@ export default function Footer() {
             justify-content: center;
           }
           .footer-massive-text h1 {
-            font-size: 14vw;
+            font-size: 11vw;
           }
           .footer-bottom-bar {
             justify-content: center;
@@ -407,7 +401,7 @@ export default function Footer() {
             border-radius: 16px;
           }
           .footer-massive-text h1 {
-            font-size: 16vw;
+            font-size: 10vw;
           }
           .footer-bottom-bar {
             flex-direction: column;
